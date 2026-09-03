@@ -1,0 +1,58 @@
+%% beamerinnerthemeKyoto.sty
+%%
+%% Copyright 2026 Masaki Waga
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   <http://www.latex-project.org/lppl.txt>
+%% and version 1.3c or later is part of all distributions
+%% of LaTeX version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status ``maintained''.
+%%
+%% The Current Maintainer of this work is
+%% Masaki Waga, email mwaga@fos.kuis.kyoto-u.ac.jp.
+%%
+%% This work consists of the files beamerthemeKyoto.sty,
+%% beamercolorthemeKyoto.sty, beamerfontthemeKyoto.sty,
+%% beamerinnerthemeKyoto.sty, beamerouterthemeKyoto.sty,
+%% and examples/demo.tex.
+%%
+%% ------------------------------------------------------------------------
+%% Inner theme of the Kyoto presentation theme: itemize/enumerate
+%% bullets and list spacing, and theorem/block styling.  Bullets are
+%% filled circles in the dark foreground color; blocks (including
+%% theorem/definition/example environments) use Beamer's own standard
+%% "rounded" block style (as used by several bundled Beamer themes),
+%% recolored navy via beamercolorthemeKyoto.sty rather than a bespoke box.
+%% ------------------------------------------------------------------------
+\ProvidesPackage{beamerinnerthemeKyoto}[2026-09-02 v1.0 Kyoto inner theme]
+
+\mode<presentation>
+  \setbeamertemplate{itemize item}[circle]
+  \setbeamertemplate{itemize subitem}[circle]
+  \setbeamertemplate{itemize subsubitem}[circle]
+
+  \setbeamertemplate{enumerate item}[default]
+  \setbeamertemplate{enumerate subitem}[default]
+
+  %% List spacing: a little room between items, tighter paragraph gaps.
+  \setlength\itemsep{4pt plus 1pt minus 1pt}
+  \setlength\parsep{2pt plus 0.5pt}
+  \setlength\partopsep{0pt}
+
+  %% Blocks (and hence \begin{theorem}/\begin{definition}/etc.): Beamer's
+  %% standard rounded title-bar box, flat (no shadow) to match the rest
+  %% of this theme; see beamercolorthemeKyoto.sty for the navy coloring.
+  \setbeamertemplate{blocks}[rounded][shadow=false]
+
+  %% Bibliography items: Beamer's standard "triangle" marker (a plain
+  %% colored glyph) rather than the default article/book icon, which is
+  %% drawn as a fixed-color image and so cannot pick up the theme's navy
+  %% "bibliography item" color; see beamercolorthemeKyoto.sty.
+  \setbeamertemplate{bibliography item}[triangle]
+\mode<all>
+
+\endinput

@@ -1,0 +1,236 @@
+%% beamerouterthemeKyoto.sty
+%%
+%% Copyright 2026 Masaki Waga
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   <http://www.latex-project.org/lppl.txt>
+%% and version 1.3c or later is part of all distributions
+%% of LaTeX version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status ``maintained''.
+%%
+%% The Current Maintainer of this work is
+%% Masaki Waga, email mwaga@fos.kuis.kyoto-u.ac.jp.
+%%
+%% This work consists of the files beamerthemeKyoto.sty,
+%% beamercolorthemeKyoto.sty, beamerfontthemeKyoto.sty,
+%% beamerinnerthemeKyoto.sty, beamerouterthemeKyoto.sty,
+%% and examples/demo.tex.
+%%
+%% ------------------------------------------------------------------------
+%% Outer theme of the Kyoto presentation theme.
+%%
+%% Lays out the frame master using plain Beamer machinery (no global
+%% scaling, no absolute-size page):
+%%
+%%   * a light background (KyotoBg),
+%%   * a navy (KyotoTheme) bar over the top ~2 % of the slide (the
+%%     title page extends this to ~15 %),
+%%   * a navy bar over the bottom ~8 % that carries the footer,
+%%   * a centered bold dark frame title with generous whitespace below,
+%%   * a centered title page and section page.
+%%
+%% The top and bottom bars are drawn with Beamer's `headline`/`footline`
+%% boxes, which also reserve the vertical space so that body text never
+%% runs into a bar.  Footers and frame numbers are shown on ordinary
+%% frames only; title and section pages are not counted and show no
+%% footer.
+%% ------------------------------------------------------------------------
+\ProvidesPackage{beamerouterthemeKyoto}[2026-09-02 v1.0 Kyoto outer theme]
+
+\RequirePackage{etoolbox}    % \ifstrempty
+
+\mode<presentation>
+
+%% ------------------------------------------------------------------
+%% Bookkeeping: ordinary content frames are counted using Beamer's own
+%% frame-number counter (`\insertframenumber'/`\inserttotalframenumber').
+%% Title/section pages are excluded from that count -- and show no footer
+%% metadata at all -- by invoking them with the standard
+%% `[noframenumbering]' frame option (see examples/demo.tex).  Beamer's
+%% own `\ifbeamer@noframenumbering' flag (set by that option, and still valid
+%% at shipout time) is read directly below to hide the footer text.
+%% ------------------------------------------------------------------
+
+%% Side margins: narrower than Beamer's own default of 1cm each.
+\setbeamersize{text margin left=0.5cm,text margin right=0.5cm}
+
+%% Bar geometry (fractions of the page height -- no absolute scaling).
+\newlength\kyoto@bar@top   \kyoto@bar@top  =\dimexpr 0.02\paperheight \relax
+\newlength\kyoto@bar@bot   \kyoto@bar@bot  =\dimexpr 0.08\paperheight \relax
+\newlength\kyoto@titleextra \kyoto@titleextra=\dimexpr 0.13\paperheight \relax
+
+%% The navy band's own drawn box is shifted up by `\kyoto@bandoverlap'
+%% (see the title page template below) to butt seamlessly against the
+%% headline strip above with no gap -- Beamer leaves a few points of
+%% space before frame body content that isn't accounted for by
+%% `\kyoto@bar@top'/`\kyoto@titleextra' alone.  On top of that, the box
+%% is made tall enough for `\kyoto@bar@top' too: it is placed directly
+%% after the headline, so if it were only `\kyoto@titleextra' tall, the
+%% logo's own container would not actually include the thin headline
+%% strip's share of that space, even though the strip is the same color
+%% and reads as part of the same band.
+\newlength\kyoto@bandoverlap \kyoto@bandoverlap=7pt
+\newlength\kyoto@bandheight
+\kyoto@bandheight=\dimexpr\kyoto@bar@top+\kyoto@titleextra+\kyoto@bandoverlap\relax
+
+%% Public: height to pass to `\includegraphics' inside `\titlegraphic' so
+%% the image nearly fills the navy band,
+%% e.g. \titlegraphic{\includegraphics[height=\kyototitlegraphicheight]{...}}.
+\newlength\kyototitlegraphicheight
+\kyototitlegraphicheight=\dimexpr\kyoto@bandheight-1pt\relax
+
+\newbox\kyoto@bandbox
+
+%% The title page packs its own body to this height (see below) rather
+%% than relying on `\textheight' directly: Beamer's own frame wrapping
+%% already constrains the body to (about) `\textheight', and nesting
+%% another `\vbox to \textheight' exactly inside that otherwise overflows
+%% it by a few points.
+\newlength\kyoto@bodyheight
+\kyoto@bodyheight=\dimexpr\textheight-9pt\relax
+
+%% The footer page-number string: "N" or, when the theme option
+%% `totalpagenum' is on, "N/total".  The denominator is Beamer's own
+%% `\insertmainframenumber', not `\inserttotalframenumber': outside any
+%% appendix the two are identical (Beamer defines the former as an alias
+%% of the latter), but once `\appendix' has been called it freezes at the
+%% frame count reached at that point, so appendix frames keep numbering
+%% past it (e.g. "7/6") -- Beamer's own documented convention for making
+%% appendix material visually distinct from the numbered "main" talk.
+\newcommand\kyoto@pagenum{%
+  \ifkyoto@totalpagenum
+    \insertframenumber/\insertmainframenumber
+  \else
+    \insertframenumber
+  \fi
+}
+
+%% ------------------------------------------------------------------
+%% Base background: the light slide color.
+%% ------------------------------------------------------------------
+\setbeamertemplate{background canvas}{%
+  {\color{KyotoBg}\vrule width\paperwidth height\paperheight}%
+}
+
+%% ------------------------------------------------------------------
+%% Top navy bar (top 2 % of the slide).
+%% ------------------------------------------------------------------
+\setbeamertemplate{headline}{%
+  %% `\rule' paints in whatever text color happens to be active, not
+  %% `\colorbox's own background color, so it must be set explicitly
+  %% (as "background canvas" above already does with `\vrule').
+  {\color{KyotoTheme}\vrule width\paperwidth height\kyoto@bar@top}%
+}
+
+%% ------------------------------------------------------------------
+%% Bottom navy bar (~8 %) plus the footer: the frame number centered
+%% horizontally and the footer text (default `\insertshortauthor') near
+%% the right edge, both in light text over the navy band.
+%% ------------------------------------------------------------------
+\setbeamertemplate{footline}{%
+  {\fboxsep\z@\colorbox{KyotoTheme}{%
+    \vbox to \kyoto@bar@bot{%
+      \color{KyotoBg}\vfil
+      \hbox to \paperwidth{%
+        \ifbeamer@noframenumbering\else
+          \hspace*{0.5\paperwidth}%
+          \makebox[0pt][c]{\kyoto@l@footer\kyoto@pagenum}%
+          \hspace*{-0.5\paperwidth}%
+          \hfill\kyoto@l@footer\kyoto@footer@right\hskip 14pt\relax
+        \fi
+      }%
+      \vfil
+    }%
+  }}%
+}
+
+%% ------------------------------------------------------------------
+%% No standard Beamer navigation symbols.
+%% ------------------------------------------------------------------
+\setbeamertemplate{navigation symbols}{}
+
+%% ------------------------------------------------------------------
+%% Ordinary frame title: bold, centered, dark, on the light background;
+%% with whitespace between the title and the body.
+%% ------------------------------------------------------------------
+\setbeamertemplate{frametitle}{%
+  \nointerlineskip
+  \vspace{7pt}%
+  {\normalfont\kyoto@l@frametitle\bfseries\color{KyotoFg}%
+   \centering\insertframetitle\par}%
+  \vspace{12pt}%
+}
+
+%% ------------------------------------------------------------------
+%% Title page: top ~15 % navy band, standard bottom bar, centered title/
+%% author/institute/date (dark over the light field), optional logo in
+%% the upper-right of the band.
+%% ------------------------------------------------------------------
+\setbeamertemplate{title page}{%
+  %% Take full manual control of the body's packing (Beamer's own
+  %% top-alignment wrapping otherwise adds extra, uncontrolled space of
+  %% its own after our content, which throws off the computed margins
+  %% below -- most visibly at the bottom).
+  \vbox to \kyoto@bodyheight{%
+  %% The navy band is built as a plain box and placed with `\moveleft'
+  %% (pure vertical-mode primitives -- no `\hspace'/`\makebox', which
+  %% start a paragraph and bring a long tail of paragraph-mode side
+  %% effects with them) so it bleeds past Beamer's usual left/right body
+  %% margins to span the full page width.
+  \setbox\kyoto@bandbox=\hbox{%
+    \fboxsep\z@\colorbox{KyotoTheme}{%
+      \hbox to \paperwidth{%
+        \vbox to \kyoto@bandheight{%
+          \vfil
+          \ifstrempty{\inserttitlegraphic}{}{%
+            \hbox to \paperwidth{\hfil\inserttitlegraphic\hskip 0.06\paperwidth\relax}%
+          }%
+          \vfil
+        }%
+        \hfil
+      }%
+    }%
+  }%
+  \vskip-\kyoto@bandoverlap\relax
+  \moveleft\dimexpr(\paperwidth-\linewidth)/2\relax\box\kyoto@bandbox
+  %% The margin above the title, between the title and the author, and
+  %% below the date is the same flexible `\vfill' in all three places, so
+  %% they always end up sharing the leftover space equally, however long
+  %% the title/author/institute/date happen to be.
+  \vfill
+  {\centering
+    \normalfont\kyoto@l@title\bfseries\color{KyotoFg}\inserttitle\par
+    \vfill
+    \normalfont\kyoto@l@author\color{KyotoFg}\insertauthor\par
+    \vskip 9pt\relax
+    \normalfont\kyoto@l@institute\color{KyotoFg}\insertinstitute\par
+    \vskip 9pt\relax
+    \normalfont\kyoto@l@date\color{KyotoFg}\insertdate\par
+  }%
+  \vfill
+  }%
+}
+
+%% ------------------------------------------------------------------
+%% Section page: top/bottom navy bars, a large bold section title
+%% centered horizontally and vertically, no footer, not counted.
+%% ------------------------------------------------------------------
+\setbeamertemplate{section page}{%
+  %% As with the title page, take full manual control of the body's
+  %% packing: Beamer's own frame wrapping otherwise adds extra space of
+  %% its own below the content, so a plain `\vfill ... \vfill' does not
+  %% actually end up vertically centered.
+  \vbox to \kyoto@bodyheight{%
+    \vfill
+    {\normalfont\kyoto@l@section\bfseries\color{KyotoFg}\centering\insertsection\par}%
+    \vfill
+  }%
+}
+
+\mode<all>
+
+\endinput

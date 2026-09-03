@@ -1,0 +1,112 @@
+%% beamerfontthemeKyoto.sty
+%%
+%% Copyright 2026 Masaki Waga
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   <http://www.latex-project.org/lppl.txt>
+%% and version 1.3c or later is part of all distributions
+%% of LaTeX version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status ``maintained''.
+%%
+%% The Current Maintainer of this work is
+%% Masaki Waga, email mwaga@fos.kuis.kyoto-u.ac.jp.
+%%
+%% This work consists of the files beamerthemeKyoto.sty,
+%% beamercolorthemeKyoto.sty, beamerfontthemeKyoto.sty,
+%% beamerinnerthemeKyoto.sty, beamerouterthemeKyoto.sty,
+%% and examples/demo.tex.
+%%
+%% ------------------------------------------------------------------------
+%% Font theme of the Kyoto presentation theme.
+%%
+%% The reference engine is LuaLaTeX.  Latin text is set in Noto Sans,
+%% Japanese in Noto Sans CJK JP, and code in Latin Modern Mono.  Because
+%% those exact faces may not be installed everywhere, each is preferred
+%% when present and gracefully falls back to a close system font so that
+%% the theme (and its example) still compile.  Bold corresponds to Noto
+%% Sans Bold / a bold CJK weight.
+%% ------------------------------------------------------------------------
+\ProvidesPackage{beamerfontthemeKyoto}[2026-09-02 v1.0 Kyoto font theme]
+
+%% ------------------------------------------------------------------
+%% Element sizes (visually-equivalent Beamer 16:9 values, leading ~1.4).
+%% Exposed as size-macros so templates can selectfont them directly.
+%% ------------------------------------------------------------------
+\newcommand\kyoto@l@title{\kyoto@titlefamily\fontsize{26.5pt}{35pt}\selectfont}     % presentation title
+\newcommand\kyoto@l@frametitle{\kyoto@titlefamily\fontsize{22.7pt}{30pt}\selectfont} % frame title
+\newcommand\kyoto@l@section{\kyoto@titlefamily\fontsize{30pt}{40pt}\selectfont}      % section title
+\newcommand\kyoto@l@author{\fontsize{15pt}{20pt}\selectfont}       % author
+\newcommand\kyoto@l@institute{\fontsize{11.3pt}{15pt}\selectfont}  % affiliate
+\newcommand\kyoto@l@date{\fontsize{12.6pt}{16.5pt}\selectfont}     % date
+\newcommand\kyoto@l@footer{\fontsize{8.8pt}{11.5pt}\selectfont}    % footer
+\newcommand\kyoto@l@footnote{\fontsize{7.6pt}{9.9pt}\selectfont}   % footnote
+
+%% ------------------------------------------------------------------
+%% Display font used for the presentation/frame/section titles only
+%% (Roboto Condensed Bold; titles are always set bold in this theme, so
+%% the real bold weight is used directly rather than a synthetic/faked
+%% bold).  Falls back to a no-op (keeping the main body font) if neither
+%% is installed.
+%% ------------------------------------------------------------------
+\IfFontExistsTF{Roboto Condensed Bold}{%
+  \newfontfamily\kyoto@titlefamily{Roboto Condensed Bold}[BoldFont={Roboto Condensed Bold}]%
+}{%
+  \IfFontExistsTF{Roboto Condensed}{%
+    \newfontfamily\kyoto@titlefamily{Roboto Condensed}[BoldFont={Roboto Condensed},AutoFakeBold=1.5]%
+  }{%
+    \newcommand\kyoto@titlefamily{}%
+  }%
+}
+
+%% ------------------------------------------------------------------
+%% Base fonts: Noto preferred, with a portable fallback.
+%% ------------------------------------------------------------------
+%% Latin sans-serif (Noto Sans -> fallback Helvetica/Arial)
+\IfFontExistsTF{Noto Sans}{%
+  \setmainfont{Noto Sans}[BoldFont={Noto Sans},AutoFakeBold=1.5]%
+}{%
+  \IfFontExistsTF{Helvetica Neue}{\setmainfont{Helvetica Neue}[BoldFont={Helvetica Neue}]}{%
+    \setmainfont{Arial}[BoldFont={Arial}]}%
+}
+
+%% Japanese CJK sans-serif (Noto Sans CJK JP -> fallback Hiragino Kaku Gothic).
+%% `luatexja-fontspec' names its Japanese-font-setting command
+%% `\setmainjfont' (not the xeCJK-style `\setCJKmainfont').
+\ifdefined\setmainjfont
+\IfFontExistsTF{Noto Sans CJK JP}{%
+  \setmainjfont{Noto Sans CJK JP}[BoldFont={Noto Sans CJK JP},AutoFakeBold=2.6]%
+}{%
+  \IfFontExistsTF{Hiragino Kaku Gothic ProN}{%
+    \setmainjfont{Hiragino Kaku Gothic ProN}[AutoFakeBold=2.6]%
+  }{%
+    \setmainjfont{Hiragino Kaku Gothic}[AutoFakeBold=2.6]%
+  }%
+}
+\fi
+
+%% Monospace (Latin Modern Mono -> fallback Menlo/Consolas)
+\IfFontExistsTF{Latin Modern Mono}{%
+  \setmonofont{Latin Modern Mono}[BoldFont={Latin Modern Mono},AutoFakeBold=1.5]%
+}{%
+  \IfFontExistsTF{Menlo}{\setmonofont{Menlo}}{\setmonofont{Courier New}}%
+}
+
+\mode<presentation>
+  %% Body text at 12pt, with the same 12pt/14.5pt leading standard LaTeX
+  %% itself uses for \normalsize at this size (size12.clo).
+  \renewcommand\normalsize{\fontsize{12pt}{14.5pt}\selectfont}
+  \renewcommand\footnotesize{\kyoto@l@footnote}
+  %% Footnote size follows the Kyoto footnote macro.
+  \setbeamerfont{footnote}{size=\footnotesize}
+  %% This theme does not shrink nested list levels -- keep sub/subsub
+  %% itemize and enumerate items at the normal body size (Beamer's default
+  %% theme uses \small/\footnotesize for those).
+  \setbeamerfont{itemize/enumerate subbody}{size=\normalsize}
+  \setbeamerfont{itemize/enumerate subsubbody}{size=\normalsize}
+\mode<all>
+
+\endinput

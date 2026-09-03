@@ -1,0 +1,146 @@
+% examples/demo.tex
+%
+% Exercise the basic Kyoto Beamer theme.  Compile with:
+%
+%   lualatex demo.tex
+%   lualatex demo.tex
+%
+\documentclass[aspectratio=169]{beamer}
+\usetheme[totalpagenum=true]{Kyoto}%   % or [totalpagenum=false] for "N" only
+
+%% ---- Front matter (mapped to standard Beamer metadata) ----
+\title{Kyoto Beamer Theme Demo}
+\author[M. Waga]{Masaki Waga}
+\institute{Kyoto University}
+\date{September 2, 2026}
+% A generic placeholder logo (no real institution, so it ships freely with
+% this repo), sized via \kyototitlegraphicheight so it nearly fills the
+% top navy band.  To use your own institution's logo instead, point this
+% at your own image (e.g. a locally-supplied, non-redistributed file).
+\titlegraphic{\includegraphics[height=\kyototitlegraphicheight]{images/dummy-university-logo.pdf}}
+
+% Optional in-document overrides (see beamerthemeKyoto.sty):
+%   \kyotototalpagenum{false}   % footer shows "N" instead of "N/total"
+%   \kyotofooter{M. Waga}       % footer right-hand text
+
+\begin{document}
+
+% 1. Title page -------------------------------------------------------
+\begin{frame}[noframenumbering]
+  \titlepage
+\end{frame}
+
+% 2. Ordinary English frame ------------------------------------------------
+\begin{frame}{Overview}
+  The Kyoto Beamer theme is a light slide with a navy band at the top
+  and a navy footer at the bottom, bold centered titles, and red
+  emphasized text.
+
+  \medskip
+  This first numbered frame is used to verify the background, the bars,
+  the centered title, and the footer.
+\end{frame}
+
+% 3. Itemized list -------------------------------------------------------
+\begin{frame}{Itemized lists}
+  \begin{itemize}
+    \item A first level bullet
+    \item Another bullet on the same level
+    \item A parent item with sub-items
+      \begin{itemize}
+        \item A second level
+        \item A third bullet here
+      \end{itemize}
+    \item And a final bullet
+  \end{itemize}
+\end{frame}
+
+% 4. Section page (not counted in the frame number) -------------------
+\section{Content examples}
+\begin{frame}[noframenumbering]
+  \sectionpage
+\end{frame}
+
+% 5. Emphasis / structure --------------------------------------------------
+\begin{frame}{Emphasis and structure}
+  Emphasized text is \emph{bold and red} via a redefined
+  \texttt{\textbackslash emph} command.
+
+  \medskip
+  This is \textbf{bold (dark)} text.
+
+  \medskip
+  An alerted item: \alert{this is the alerted text}.
+\end{frame}
+
+% 6. Mixed Japanese / English frame --------------------------------------
+\begin{frame}{Mixed 日本語 text}
+  This theme supports Japanese, e.g.\ this is the {\bfseries 京都} theme.
+
+  \medskip
+  京都大学の情報学研究科で使っているテーマを、Beamer にもport してみました。
+  一部の単語は\emph{太字かつ赤く}強調できます。
+\end{frame}
+
+% 7. Theorems, definitions, and proofs ------------------------------------
+\begin{frame}{Theorems}
+  \begin{theorem}[Pythagorean theorem]
+    For a right triangle with legs $a$, $b$ and hypotenuse $c$,
+    $a^2 + b^2 = c^2$.
+  \end{theorem}
+
+  \begin{definition}
+    A \emph{prime number} is a natural number greater than $1$ with no
+    divisors other than $1$ and itself.
+  \end{definition}
+\end{frame}
+
+% 8. Typography: monospace, hyperlinks, footnote --------------------------
+\begin{frame}{Typography}
+  Monospace text: \texttt{\textbackslash usetheme\{Kyoto\}} uses
+  \texttt{LuaLaTeX}.
+
+  \medskip
+  A hyperlink: \href{https://github.com/MasWag/beamer-theme-kyoto}{the
+  Kyoto theme} is drawn in the link color.\footnote{The footnote text
+  uses the smaller footnote size.}
+
+  \medskip
+  This is the last of the six ordinary frames, so the footer should
+  show the total number here when \texttt{totalpagenum} is on.
+\end{frame}
+
+% 9. Appendix: reuses Beamer's standard \appendix mechanism, so frame
+% numbers keep counting but the footer's "total" freezes at the six
+% ordinary frames above (per Beamer's own documented convention). -------
+\appendix
+
+\section{Appendix}
+\begin{frame}[noframenumbering]
+  \sectionpage
+\end{frame}
+
+\begin{frame}{Backup slide}
+  This frame comes after \texttt{\textbackslash appendix}: it is still
+  numbered, but the footer's denominator stays frozen at the six main
+  frames, so this one reads past the total (e.g.\ ``7/6'').
+\end{frame}
+
+% 10. Bibliography: Beamer's standard `thebibliography' environment and
+% \bibitem, styled via the bibliography beamer colors/templates. ---------
+\section{References}
+\begin{frame}[allowframebreaks]{References}
+  \begin{thebibliography}{99}
+    \bibitem{knuth1984}
+      Donald E. Knuth.
+      \newblock \textit{The \TeX book}.
+      \newblock Addison-Wesley, 1984.
+
+    \bibitem{lamport1994}
+      Leslie Lamport.
+      \newblock \textit{\LaTeX: A Document Preparation System}.
+      \newblock Addison-Wesley, 2nd edition, 1994.
+  \end{thebibliography}
+\end{frame}
+
+\end{document}

@@ -1,0 +1,115 @@
+%% beamerthemeKyoto.sty
+%%
+%% Copyright 2026 Masaki Waga
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   <http://www.latex-project.org/lppl.txt>
+%% and version 1.3c or later is part of all distributions
+%% of LaTeX version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status ``maintained''.
+%%
+%% The Current Maintainer of this work is
+%% Masaki Waga, email mwaga@fos.kuis.kyoto-u.ac.jp.
+%%
+%% This work consists of the files beamerthemeKyoto.sty,
+%% beamercolorthemeKyoto.sty, beamerfontthemeKyoto.sty,
+%% beamerinnerthemeKyoto.sty, beamerouterthemeKyoto.sty,
+%% and examples/demo.tex.
+%%
+%% ------------------------------------------------------------------------
+%% Kyoto theme for Beamer.
+%%
+%% Recommended usage (reference engine: LuaLaTeX):
+%%
+%%   \documentclass[aspectratio=169]{beamer}
+%%   \usetheme{Kyoto}
+%%
+%% Theme options (after the class, i.e. \usetheme[<opt>,...]{Kyoto}):
+%%
+%%   totalpagenum = true|false      (default: true)
+%%       Show "frame/total" in the footer when on, or only the frame
+%%       number when off.
+%%   rightfooter  = <text>
+%%       Text shown at the right edge of the footer.  The default is
+%%       `\insertshortauthor'.  (Prefer the command below for text that
+%%       contains spaces.)
+%%
+%% In-document commands:
+%%
+%%   \kyotototalpagenum{true|false}   toggle the "frame/total" footer
+%%   \kyotofooter{<text>}             set the right-hand footer text
+%% ------------------------------------------------------------------------
+\ProvidesPackage{beamerthemeKyoto}[2026-09-02 v1.0 Kyoto Beamer theme]
+
+%% ------------------------------------------------------------------
+%% Dependencies
+%% ------------------------------------------------------------------
+\RequirePackage{etoolbox}     % \ifstrequal, \pretocmd
+\RequirePackage{kvoptions}    % key=value package options
+\RequirePackage{fontspec}     % Noto Sans / Latin Modern Mono
+\IfFileExists{luatexja-fontspec.sty}{%
+  \RequirePackage{luatexja-fontspec}   % Japanese CJK
+}{%
+  \PackageWarning{beamerthemeKyoto}{%
+    `luatexja-fontspec' not found -- Japanese (CJK) text may not render.}
+}
+
+%% ------------------------------------------------------------------
+%% Options: \usetheme[totalpagenum=true|false,rightfooter=<text>]{Kyoto}
+%% Declares the boolean `\ifkyoto@totalpagenum' and the string macro
+%% `\kyoto@rightfooter', aliased below to the names used by the outer
+%% theme.
+%% ------------------------------------------------------------------
+\SetupKeyvalOptions{family=kyoto,prefix=kyoto@}
+\DeclareBoolOption[true]{totalpagenum}
+\DeclareStringOption[\insertshortauthor]{rightfooter}
+\ProcessKeyvalOptions*
+\let\kyoto@footer@right\kyoto@rightfooter
+
+%% Public overrides (usable anywhere in the body).  These are typically
+%% called inside a `frame' environment, which is its own TeX group, so
+%% the changes are made global to survive past the enclosing `\end{frame}'.
+\newcommand\kyotototalpagenum[1]{%
+  \ifstrequal{#1}{false}{\global\kyoto@totalpagenumfalse}{%
+  \ifstrequal{#1}{off}{\global\kyoto@totalpagenumfalse}{%
+  \ifstrequal{#1}{no}{\global\kyoto@totalpagenumfalse}{%
+    \global\kyoto@totalpagenumtrue}}}%
+}
+\newcommand\kyotofooter[1]{\gdef\kyoto@footer@right{#1}}
+
+%% ------------------------------------------------------------------
+%% The theme
+%% ------------------------------------------------------------------
+%% Force top-aligned frame bodies.  On at least some Beamer installs the
+%% default is vertical centering (as if `\documentclass[c]{beamer}' were
+%% given) even though `\newif\ifbeamer@centered' itself defaults to
+%% false; without this, frame content (most visibly the title page,
+%% whose margins are computed assuming a top-aligned, fixed-height body)
+%% ends up shifted an unpredictable amount down the slide.
+\beamer@centeredfalse
+\mode<presentation>
+  \usefonttheme{Kyoto}
+  \usecolortheme{Kyoto}
+  \useinnertheme{Kyoto}
+  \useoutertheme{Kyoto}
+  %% Alerted text is bold and colored, matching `\emph' below.
+  \setbeamerfont{alerted text}{series=\bfseries}
+\mode<all>
+
+%% `\emph' -> bold + emphasis color, rather than the usual italics.
+\renewcommand\emph[1]{\textcolor{KyotoEmph}{\textbf{#1}}}
+
+%% Hyperlinks (internal / url / citation) use the navy-blue link color.
+\AtBeginDocument{%
+  \hypersetup{%
+    linkcolor  = KyotoLink,
+    urlcolor   = KyotoLink,
+    citecolor  = KyotoLink,
+  }%
+}
+
+\endinput

@@ -1,0 +1,91 @@
+%% beamercolorthemeKyoto.sty
+%%
+%% Copyright 2026 Masaki Waga
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   <http://www.latex-project.org/lppl.txt>
+%% and version 1.3c or later is part of all distributions
+%% of LaTeX version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status ``maintained''.
+%%
+%% The Current Maintainer of this work is
+%% Masaki Waga, email mwaga@fos.kuis.kyoto-u.ac.jp.
+%%
+%% This work consists of the files beamerthemeKyoto.sty,
+%% beamercolorthemeKyoto.sty, beamerfontthemeKyoto.sty,
+%% beamerinnerthemeKyoto.sty, beamerouterthemeKyoto.sty,
+%% and examples/demo.tex.
+%%
+%% ------------------------------------------------------------------------
+%% Color theme of the Kyoto presentation theme.  The Beamer color
+%% elements are mapped so that ordinary text, titles, bullets and
+%% emphasized text use the dark foreground, links use the link color,
+%% and the light background fills the slide.
+%% ------------------------------------------------------------------------
+\ProvidesPackage{beamercolorthemeKyoto}[2026-09-02 v1.0 Kyoto color theme]
+
+%% ------------------------------------------------------------------
+%% Kyoto-specific palette
+%% ------------------------------------------------------------------
+\definecolor{KyotoBg}{HTML}{EEEEEE}                 % background          #EEEEEE
+\definecolor{KyotoFg}{HTML}{222222}                 % foreground          #222222
+\definecolor{KyotoEmph}{HTML}{FF0027}               % /emph, alerted text #ff0027
+\definecolor{KyotoLink}{HTML}{2D539E}               % links               #2d539e
+\definecolor{KyotoTitle}{HTML}{081F57}              % title               #081F57
+\definecolor{KyotoTheme}{HTML}{081F57}              % navy bars/theme     #081F57
+\definecolor{KyotoSeparator}{HTML}{555555}          % separator           #555555
+\definecolor{KyotoSectionRibbon}{HTML}{AAAAAA}      % section ribbon (defined, unused)
+\definecolor{KyotoSectionRibbonIntersect}{HTML}{666666} % (defined, unused)
+
+\mode<presentation>
+  %% Text and structure: dark foreground on the light background (the
+  %% frame title, bullets and body all use the same dark foreground).
+  \setbeamercolor{normal text}{fg=KyotoFg,bg=KyotoBg}
+  \setbeamercolor{structure}{fg=KyotoFg,bg=KyotoBg}
+  \setbeamercolor{alerted text}{fg=KyotoEmph,bg=KyotoBg}
+
+  %% Title-page and per-frame titles are dark; the navy theme color is
+  %% used only for the bars.
+  \setbeamercolor{title}{fg=KyotoFg,bg=KyotoBg}
+  \setbeamercolor{frametitle}{fg=KyotoFg,bg=KyotoBg}
+  \setbeamercolor{section title}{fg=KyotoFg,bg=KyotoBg}
+  \setbeamercolor{subtitle}{fg=KyotoFg,bg=KyotoBg}
+  \setbeamercolor{author}{fg=KyotoFg,bg=KyotoBg}
+  \setbeamercolor{institute}{fg=KyotoFg,bg=KyotoBg}
+  \setbeamercolor{date}{fg=KyotoFg,bg=KyotoBg}
+  \setbeamercolor{titlegraphic}{fg=KyotoTitle,bg=KyotoBg}
+
+  %% Footnote marks use the link color.
+  \setbeamercolor{footnote mark}{fg=KyotoLink,bg=KyotoBg}
+  \setbeamercolor{footnote text}{fg=KyotoFg,bg=KyotoBg}
+
+  %% Hyperlinks (internal / url / citation) are the navy-blue link color.
+  \setbeamercolor{link}{fg=KyotoLink}
+  \setbeamercolor{navigation symbols}{fg=KyotoFg,bg=KyotoBg}
+
+  %% Blocks (theorem/definition/example environments, etc.): a navy
+  %% title bar with light text, and a faintly tinted body so the box
+  %% reads clearly against the page background without competing with it.
+  \setbeamercolor{block title}{fg=KyotoBg,bg=KyotoTheme}
+  \setbeamercolor{block body}{fg=KyotoFg,bg=KyotoTheme!12!KyotoBg}
+  \setbeamercolor{block title alerted}{fg=KyotoBg,bg=KyotoEmph}
+  \setbeamercolor{block body alerted}{fg=KyotoFg,bg=KyotoEmph!12!KyotoBg}
+  \setbeamercolor{block title example}{fg=KyotoBg,bg=KyotoLink}
+  \setbeamercolor{block body example}{fg=KyotoFg,bg=KyotoLink!12!KyotoBg}
+
+  %% Bibliography (Beamer's standard `thebibliography'/\bibitem
+  %% mechanism): the item marker and author line in the theme's navy
+  %% tones, the title in the ordinary dark foreground, and the
+  %% location/note in a muted gray so they read as secondary detail.
+  \setbeamercolor{bibliography item}{fg=KyotoLink,bg=KyotoBg}
+  \setbeamercolor{bibliography entry author}{fg=KyotoTheme,bg=KyotoBg}
+  \setbeamercolor{bibliography entry title}{fg=KyotoFg,bg=KyotoBg}
+  \setbeamercolor{bibliography entry location}{fg=KyotoSeparator,bg=KyotoBg}
+  \setbeamercolor{bibliography entry note}{fg=KyotoSeparator,bg=KyotoBg}
+\mode<all>
+
+\endinput
