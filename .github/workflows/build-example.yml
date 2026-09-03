@@ -10,17 +10,41 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # A full TeX Live install is the simplest way to reliably get
-      # LuaLaTeX, luatexja, fontspec and the theme's other LaTeX
-      # dependencies without hand-picking individual sub-packages.
-      # Noto's CJK fonts are not bundled in TeX Live itself, so they are
-      # installed separately -- without them, \setmainjfont falls back
-      # to a font that only exists on the maintainer's own machine and
-      # the demo's Japanese text would fail to render on this runner.
+      # Explicit TeX Live package set instead of texlive-full, derived
+      # from what examples/demo.tex actually pulls in (checked against
+      # examples/demo.log and each package's TeX Live "collection" via
+      # `tlmgr info`):
+      #   texlive-latex-base         core LaTeX (hyperref, geometry,
+      #                              kvoptions, etoolbox, amsmath, ...)
+      #   texlive-latex-recommended  beamer itself, translator, xcolor,
+      #                              fontspec, xkeyval
+      #   texlive-latex-extra        everyhook (beamer's font-size hooks)
+      #   texlive-pictures           pgf (beamer's own dependency)
+      #   texlive-luatex             luaotfload (LuaLaTeX font loading)
+      #   texlive-lang-japanese      luatexja / luatexja-fontspec
+      #   texlive-fonts-recommended  Latin Modern (this theme's monospace
+      #                              font, not just a fallback)
+      #   texlive-fonts-extra        Noto Sans / Roboto Condensed, bundled
+      #                              by TeX Live as plain font files
+      # Noto's CJK fonts are a separate apt package: TeX Live does not
+      # bundle them itself, so without `fonts-noto-cjk`, \setmainjfont
+      # would fall back to a font that only exists on the maintainer's
+      # own machine, and the demo's Japanese text would fail to render
+      # on this runner.
       - name: Install TeX Live and CJK fonts
         run: |
           sudo apt-get update
-          sudo apt-get install -y texlive-full fonts-noto-cjk
+          sudo apt-get install -y \
+            texlive-latex-base \
+            texlive-latex-recommended \
+            texlive-latex-extra \
+            texlive-pictures \
+            texlive-luatex \
+            texlive-lang-japanese \
+            texlive-fonts-recommended \
+            texlive-fonts-extra \
+            latexmk \
+            fonts-noto-cjk
 
       - name: Build examples/demo.pdf
         run: make
