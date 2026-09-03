@@ -46,7 +46,7 @@ jobs:
             latexmk \
             fonts-noto-cjk
 
-      - name: Build examples/demo.pdf
+      - name: Build examples
         run: make
 
       - name: Upload demo.pdf
@@ -54,3 +54,9 @@ jobs:
         with:
           name: demo-pdf
           path: examples/demo.pdf
+
+      - name: Upload tikz-demo.pdf
+        uses: actions/upload-artifact@v4
+        with:
+          name: tikz-demo-pdf
+          path: examples/tikz-demo.pdf

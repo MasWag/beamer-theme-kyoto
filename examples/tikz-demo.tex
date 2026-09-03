@@ -1,0 +1,83 @@
+% examples/tikz-demo.tex
+%
+% Exercise the Kyoto TikZ helper library (tikzlibrarykyoto.code.tex).
+% Build from the repository root with:
+%
+%   make
+%
+% which runs latexmk (LuaLaTeX) via examples/latexmkrc for both example
+% PDFs -- no need to install anything into TEXMF or set TEXINPUTS by
+% hand. Equivalently, from this directory: `latexmk tikz-demo.tex`.
+%
+\documentclass[aspectratio=169]{beamer}
+\usetheme{Kyoto}
+\usepackage{tikz}
+\usetikzlibrary{kyoto}
+
+\begin{document}
+
+% 1. Boxes and a straight arrow ---------------------------------------
+\begin{frame}{Boxes and a straight arrow}
+  \centering
+  \begin{tikzpicture}
+    \node[kyoto/box] (a) {Learner};
+    \node[kyoto/box, right=3cm of a] (b) {Oracle};
+    \draw[kyoto/arrow] (a) -- (b);
+  \end{tikzpicture}
+\end{frame}
+
+% 2. Curved arrows and labels ------------------------------------------
+\begin{frame}{Curved arrows and labels}
+  \centering
+  \begin{tikzpicture}[node distance=2cm]
+    \node[kyoto/box] (learner) {Learner};
+    \node[kyoto/box, right=of learner] (oracle) {Oracle};
+
+    \draw[kyoto/arrow] (learner) to[bend left]
+      node[kyoto/label, above] {Query} (oracle);
+    \draw[kyoto/arrow alert] (oracle) to[bend left]
+      node[kyoto/label, below] {Answer} (learner);
+  \end{tikzpicture}
+\end{frame}
+
+% 3. Box variants: normal vs alert vs secondary -------------------------
+\begin{frame}{Box variants}
+  \centering
+  \begin{tikzpicture}
+    \node[kyoto/box] (n) {Normal};
+    \node[kyoto/box alert, right=1.5cm of n] (al) {Alert};
+    \node[kyoto/box secondary, right=1.5cm of al] (se) {Secondary};
+  \end{tikzpicture}
+\end{frame}
+
+% 4. Arrow variants: normal vs alert vs secondary, plus dashed ----------
+\begin{frame}{Arrow variants}
+  \centering
+  \begin{tikzpicture}
+    \node[kyoto/box] (a1) {A}; \node[kyoto/box, right=2.5cm of a1] (b1) {B};
+    \node[kyoto/box, below=1cm of a1] (a2) {A}; \node[kyoto/box, right=2.5cm of a2] (b2) {B};
+    \node[kyoto/box, below=1cm of a2] (a3) {A}; \node[kyoto/box, right=2.5cm of a3] (b3) {B};
+    \node[kyoto/box, below=1cm of a3] (a4) {A}; \node[kyoto/box, right=2.5cm of a4] (b4) {B};
+
+    \draw[kyoto/arrow] (a1) -- (b1);
+    \draw[kyoto/arrow alert] (a2) -- (b2);
+    \draw[kyoto/arrow secondary] (a3) -- (b3);
+    \draw[kyoto/arrow dashed] (a4) -- (b4)
+      node[kyoto/label, midway, above] {optional};
+  \end{tikzpicture}
+\end{frame}
+
+% 5. Positioning library usage (below=of, right=of together) -----------
+\begin{frame}{Positioning}
+  \centering
+  \begin{tikzpicture}[node distance=1.5cm]
+    \node[kyoto/box] (top) {Top};
+    \node[kyoto/box, below=of top] (mid) {Middle};
+    \node[kyoto/box secondary, right=2cm of mid] (side) {Side};
+
+    \draw[kyoto/arrow] (top) -- (mid);
+    \draw[kyoto/arrow secondary] (mid) -- (side);
+  \end{tikzpicture}
+\end{frame}
+
+\end{document}

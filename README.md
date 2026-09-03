@@ -117,12 +117,57 @@ Japanese/English text.
 make
 ```
 
-from the repository root builds `examples/demo.pdf` with `latexmk` and
-LuaLaTeX (`examples/latexmkrc` points `TEXINPUTS` at the theme files in
-the repository root, so nothing needs installing into TEXMF first).
-Equivalently, from the `examples/` directory: `latexmk demo.tex`.
+from the repository root builds `examples/demo.pdf` and
+`examples/tikz-demo.pdf` with `latexmk` and LuaLaTeX
+(`examples/latexmkrc` points `TEXINPUTS` at the theme files in the
+repository root, so nothing needs installing into TEXMF first).
+Equivalently, from the `examples/` directory: `latexmk demo.tex` or
+`latexmk tikz-demo.tex`.
 
 `make clean` removes the generated files.
+
+## TikZ
+
+The Beamer theme does not load TikZ itself -- `tikzlibrarykyoto.code.tex`
+is an opt-in helper library. Load it explicitly:
+
+```latex
+\usepackage{tikz}
+\usetikzlibrary{kyoto}
+```
+
+It is a thin styling layer over ordinary TikZ: it adds no drawing
+commands, only named styles in the Kyoto palette that you apply to
+plain TikZ nodes/paths, using TikZ's own geometry mechanisms
+(`right=of`, `bend left`/`bend right`, explicit coordinates,
+`positioning`, etc.).
+
+| Style | Use |
+|---|---|
+| `kyoto/box` | A node with rounded corners, navy border, light fill. |
+| `kyoto/box alert` | Same geometry, red (alert) border. |
+| `kyoto/box secondary` | Same geometry, muted gray border. |
+| `kyoto/label` | Unobtrusive colored text for labels on/near arrows. |
+| `kyoto/arrow` | A navy arrow with a modern `arrows.meta` Stealth tip. |
+| `kyoto/arrow alert` | Same geometry, red. |
+| `kyoto/arrow secondary` | Same geometry, muted gray. |
+| `kyoto/arrow dashed` | Same as `kyoto/arrow`, dashed. |
+
+```latex
+\begin{tikzpicture}
+  \node[kyoto/box] (a) {Start};
+  \node[kyoto/box, right=3cm of a] (b) {End};
+  \draw[kyoto/arrow] (a) -- (b) node[kyoto/label, midway, above] {next};
+\end{tikzpicture}
+```
+
+The library also works without the Kyoto Beamer theme loaded (e.g. in
+a bare `standalone` document): it reuses the theme's colors if they
+are already defined, and only falls back to its own copies of the same
+values otherwise, so the visual result never depends on load order.
+
+See `examples/tikz-demo.tex` for a fuller demo (box/arrow variants,
+curved arrows, labels, dashed arrows, `positioning` usage).
 
 ## License
 

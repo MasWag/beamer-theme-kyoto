@@ -1,0 +1,101 @@
+%% tikzlibrarykyoto.code.tex
+%%
+%% Copyright 2026 Masaki Waga
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   <http://www.latex-project.org/lppl.txt>
+%% and version 1.3c or later is part of all distributions
+%% of LaTeX version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status ``maintained''.
+%%
+%% The Current Maintainer of this work is
+%% Masaki Waga, email mwaga@fos.kuis.kyoto-u.ac.jp.
+%%
+%% This work consists of the files listed in MANIFEST.md.
+%%
+%% ------------------------------------------------------------------------
+%% TikZ helper library for the Kyoto presentation theme: a thin styling
+%% layer over ordinary TikZ (boxes, labels and arrows in the Kyoto
+%% palette). It imposes no drawing DSL -- use ordinary TikZ geometry
+%% (right=of, bend left/right, out=/in=, explicit coordinates, ...) and
+%% apply the `kyoto/...' styles for appearance only. Works standalone
+%% (falls back to its own copies of the Kyoto colors if the Beamer
+%% theme has not defined them) and reuses the theme's palette without
+%% redefinition when it has.
+%% ------------------------------------------------------------------------
+\ProvidesFile{tikzlibrarykyoto.code.tex}[2026-09-03 v1.0 Kyoto TikZ library]
+
+\RequirePackage{xcolor}
+
+\usetikzlibrary{arrows.meta}
+\usetikzlibrary{positioning}
+
+%% ------------------------------------------------------------------
+%% Palette: reuse the Beamer theme's colors if already defined;
+%% otherwise define the same values as a standalone fallback.
+%% \@ifundefinedcolor (from xcolor) is the correct "is this color name
+%% already defined" test -- NOT \@ifundefined{color@Name}, which tests
+%% xcolor's per-MODEL registry and would always report "undefined".
+%% ------------------------------------------------------------------
+\makeatletter
+\@ifundefinedcolor{KyotoBg}{\definecolor{KyotoBg}{HTML}{EEEEEE}}{}
+\@ifundefinedcolor{KyotoFg}{\definecolor{KyotoFg}{HTML}{222222}}{}
+\@ifundefinedcolor{KyotoTheme}{\definecolor{KyotoTheme}{HTML}{081F57}}{}
+\@ifundefinedcolor{KyotoEmph}{\definecolor{KyotoEmph}{HTML}{FF0027}}{}
+\@ifundefinedcolor{KyotoLink}{\definecolor{KyotoLink}{HTML}{2D539E}}{}
+\@ifundefinedcolor{KyotoSeparator}{\definecolor{KyotoSeparator}{HTML}{555555}}{}
+\makeatother
+
+%% ------------------------------------------------------------------
+%% Public styles, namespaced under kyoto/. No fixed width/height, so
+%% these compose with user-supplied `minimum width=', `text width=',
+%% `align=', `right=of', etc.
+%% ------------------------------------------------------------------
+\tikzset{
+  %% Boxes -----------------------------------------------------------
+  kyoto/box/.style={
+    rounded corners=3pt,
+    draw=KyotoTheme,
+    line width=1pt,
+    fill=KyotoBg,
+    text=KyotoFg,
+    align=center,
+    inner sep=8pt,
+  },
+  kyoto/box alert/.style={
+    kyoto/box,
+    draw=KyotoEmph,
+  },
+  kyoto/box secondary/.style={
+    kyoto/box,
+    draw=KyotoSeparator,
+  },
+  %% Labels (text on/near arrows and objects) -------------------------
+  kyoto/label/.style={
+    text=KyotoFg,
+  },
+  %% Arrows ------------------------------------------------------------
+  kyoto/arrow/.style={
+    draw=KyotoTheme,
+    line width=0.8pt,
+    -{Stealth[length=2.5mm, width=2mm]},
+  },
+  kyoto/arrow alert/.style={
+    kyoto/arrow,
+    draw=KyotoEmph,
+  },
+  kyoto/arrow secondary/.style={
+    kyoto/arrow,
+    draw=KyotoSeparator,
+  },
+  kyoto/arrow dashed/.style={
+    kyoto/arrow,
+    dashed,
+  },
+}
+
+\endinput

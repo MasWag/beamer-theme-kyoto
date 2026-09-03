@@ -13,9 +13,14 @@ add it to the appropriate section below.
 - `beamerinnerthemeKyoto.sty`
 - `beamerouterthemeKyoto.sty`
 
+## TikZ library
+
+- `tikzlibrarykyoto.code.tex`
+
 ## Example
 
 - `examples/demo.tex`
+- `examples/tikz-demo.tex`
 - `examples/latexmkrc`
 - `examples/images/dummy-university-logo.pdf`
 
