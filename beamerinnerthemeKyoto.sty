@@ -39,8 +39,28 @@
   \setbeamertemplate{enumerate subitem}[default]
 
   %% List spacing: a little room between items, tighter paragraph gaps.
-  \setlength\itemsep{4pt plus 1pt minus 1pt}
-  \setlength\parsep{2pt plus 0.5pt}
+  %% Setting `\itemsep'/`\parsep' here directly has no lasting effect --
+  %% `itemize'/`enumerate' reset both from Beamer's own `\@listi'/`\@listI'
+  %% (nesting level 1), `\@listii' (level 2) and `\@listiii' (level 3) each
+  %% time such a list environment starts. Appending our values to those
+  %% macros instead is the standard, package-free way to customize list
+  %% spacing; because LaTeX tracks list nesting with a single shared
+  %% `\@listdepth' counter, this applies equally to `itemize' and
+  %% `enumerate' at each level, without touching the bullet/enumeration
+  %% templates above or the (unchanged) sub-level body font size.
+  \g@addto@macro\@listi{%
+    \setlength\itemsep{4pt plus 1pt minus 1pt}%
+    \setlength\parsep{2pt plus 0.5pt}%
+  }
+  \let\@listI\@listi
+  \g@addto@macro\@listii{%
+    \setlength\itemsep{4pt plus 1pt minus 1pt}%
+    \setlength\parsep{2pt plus 0.5pt}%
+  }
+  \g@addto@macro\@listiii{%
+    \setlength\itemsep{4pt plus 1pt minus 1pt}%
+    \setlength\parsep{2pt plus 0.5pt}%
+  }
   \setlength\partopsep{0pt}
 
   %% Blocks (and hence \begin{theorem}/\begin{definition}/etc.): Beamer's

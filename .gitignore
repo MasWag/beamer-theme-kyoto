@@ -1,6 +1,9 @@
 ## Not licensed for redistribution -- local use only:
 examples/images/kyoto-university-logo.jpeg
 
+## Build output (regenerate with `make`, see the repository root Makefile):
+examples/demo.pdf
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof

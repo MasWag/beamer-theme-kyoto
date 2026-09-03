@@ -1,0 +1,32 @@
+name: Build example
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # A full TeX Live install is the simplest way to reliably get
+      # LuaLaTeX, luatexja, fontspec and the theme's other LaTeX
+      # dependencies without hand-picking individual sub-packages.
+      # Noto's CJK fonts are not bundled in TeX Live itself, so they are
+      # installed separately -- without them, \setmainjfont falls back
+      # to a font that only exists on the maintainer's own machine and
+      # the demo's Japanese text would fail to render on this runner.
+      - name: Install TeX Live and CJK fonts
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-full fonts-noto-cjk
+
+      - name: Build examples/demo.pdf
+        run: make
+
+      - name: Upload demo.pdf
+        uses: actions/upload-artifact@v4
+        with:
+          name: demo-pdf
+          path: examples/demo.pdf

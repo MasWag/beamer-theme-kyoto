@@ -1,9 +1,13 @@
 % examples/demo.tex
 %
-% Exercise the basic Kyoto Beamer theme.  Compile with:
+% Exercise the basic Kyoto Beamer theme.  Build from the repository root
+% with:
 %
-%   lualatex demo.tex
-%   lualatex demo.tex
+%   make
+%
+% which runs latexmk (LuaLaTeX) via examples/latexmkrc -- no need to
+% install the theme into TEXMF or set TEXINPUTS by hand.  Equivalently,
+% from this directory: `latexmk demo.tex`.
 %
 \documentclass[aspectratio=169]{beamer}
 \usetheme[totalpagenum=true]{Kyoto}%   % or [totalpagenum=false] for "N" only

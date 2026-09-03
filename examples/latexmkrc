@@ -1,0 +1,18 @@
+# latexmk settings for building demo.tex.
+#
+# Run as `latexmk demo.tex` from this directory, or via `make` from the
+# repository root.  latexmk only reads an RC file from its own current
+# working directory (not from ancestor directories), so this file lives
+# here rather than at the repository root.
+
+# Find the theme files (beamerthemeKyoto.sty and friends, one directory
+# up) without installing them into TEXMF first.  The trailing colon
+# keeps the default TeX search paths in effect alongside the extra one.
+$ENV{'TEXINPUTS'} = '..:' . ($ENV{'TEXINPUTS'} // '') . ':';
+
+# LuaLaTeX is this theme's reference engine.  `-halt-on-error' makes a
+# real compilation error (as opposed to the usual benign font-warning
+# noise) stop the run with a nonzero exit status, which is what lets a
+# CI job actually detect a regression.
+$pdf_mode = 4;
+$lualatex = 'lualatex -interaction=nonstopmode -halt-on-error -synctex=1 %O %S';
