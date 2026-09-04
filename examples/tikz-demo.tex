@@ -14,6 +14,7 @@
 \usepackage{tikz}
 \usetikzlibrary{kyoto}
 \usetikzlibrary{automata}
+\usetikzlibrary{matrix}
 
 \begin{document}
 
@@ -173,6 +174,69 @@
       above right=1.2cm and -0.5cm of q1,
       text width=3cm,
     ] {Accepting state};
+  \end{tikzpicture}
+\end{frame}
+
+% 8. Generic highlight: fit + background layer ---------------------------
+\begin{frame}{Highlighting a group of nodes}
+  \centering
+  \begin{tikzpicture}[node distance=2cm]
+    \node[kyoto/box] (a) {A};
+    \node[kyoto/box, right=of a] (b) {B};
+    \node[kyoto/box, right=of b] (c) {C};
+
+    \draw[kyoto/arrow] (a) -- (b);
+    \draw[kyoto/arrow] (b) -- (c);
+
+    \begin{scope}[on background layer]
+      \node[kyoto/highlight, fit=(a)(b)] {};
+    \end{scope}
+    \node[kyoto/highlight alert, fit=(c)] {};
+  \end{tikzpicture}
+\end{frame}
+
+% 9. Generic highlight on a TikZ matrix (observation-table-like) --------
+% [fragile] avoids a pgf/beamer interaction that otherwise corrupts
+% `matrix of nodes' cell naming inside a `frame' (independent of Kyoto
+% and reproducible with a bare `matrix of nodes' in a plain frame).
+\begin{frame}[fragile]{Highlighting a matrix region}
+  \centering
+  \begin{tikzpicture}
+    \matrix (m) [
+        matrix of nodes,
+        nodes={draw=KyotoSeparator, minimum width=1.4cm, minimum height=7mm, anchor=center},
+        column sep=-\pgflinewidth, row sep=-\pgflinewidth,
+      ] {
+      $\varepsilon$ & $a$ & $b$ & $ab$ \\
+      $1$ & $0$ & $1$ & $0$ \\
+      $0$ & $1$ & $0$ & $1$ \\
+    };
+
+    \begin{scope}[on background layer]
+      \node[kyoto/highlight, fit=(m-2-1)(m-2-4)] {};
+    \end{scope}
+  \end{tikzpicture}
+\end{frame}
+
+% 10. Generic highlight on an automaton state group (optional) ----------
+\begin{frame}{Highlighting part of an automaton}
+  \centering
+  \begin{tikzpicture}[
+      ->,
+      >={Stealth[length=2.5mm, width=2mm]},
+      node distance=3cm,
+      initial text={},
+      every state/.style={draw=KyotoTheme, text=KyotoFg, fill=KyotoBg},
+    ]
+    \node[state, initial] (q0) {$q_0$};
+    \node[state, accepting, right=of q0] (q1) {$q_1$};
+
+    \draw (q0) edge[bend left] node[kyoto/label, above] {$a$} (q1)
+          (q1) edge[bend left] node[kyoto/label, below] {$b$} (q0);
+
+    \begin{scope}[on background layer]
+      \node[kyoto/highlight alert, fit=(q0)(q1)] {};
+    \end{scope}
   \end{tikzpicture}
 \end{frame}
 

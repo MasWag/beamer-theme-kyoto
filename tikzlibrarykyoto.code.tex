@@ -27,13 +27,16 @@
 %% theme has not defined them) and reuses the theme's palette without
 %% redefinition when it has.
 %% ------------------------------------------------------------------------
-\ProvidesFile{tikzlibrarykyoto.code.tex}[2026-09-04 v1.2 Kyoto TikZ library]
+\ProvidesFile{tikzlibrarykyoto.code.tex}[2026-09-04 v1.4 Kyoto TikZ library]
 
 \RequirePackage{xcolor}
 
 \usetikzlibrary{arrows.meta}
 \usetikzlibrary{positioning}
 \usetikzlibrary{shapes.callouts}
+\usetikzlibrary{fit}
+\usetikzlibrary{backgrounds}
+\usetikzlibrary{shadows}
 
 %% ------------------------------------------------------------------
 %% Palette: reuse the Beamer theme's colors if already defined;
@@ -64,8 +67,20 @@
     align=center,
     inner sep=8pt,
   },
+  %% Subtle drop shadow, used by the filled box/callout appearance only
+  %% (kyoto/box) -- the outline variants (kyoto/box base + light fill)
+  %% stay flat. ---------------------------------------------------------
+  kyoto/shadow/.style={
+    drop shadow={
+      shadow xshift=1pt,
+      shadow yshift=-1pt,
+      opacity=.35,
+      fill=black!60,
+    },
+  },
   kyoto/box/.style={
     kyoto/box base,
+    kyoto/shadow,
     draw=KyotoTheme,
     fill=KyotoTheme,
     text=KyotoBg,
@@ -133,6 +148,22 @@
   kyoto/arrow dashed/.style={
     kyoto/arrow,
     dashed,
+  },
+  %% Generic node-group highlighting -- appearance only; which nodes
+  %% are enclosed is chosen entirely by TikZ's own `fit' option, and
+  %% the layer (e.g. `on background layer') is chosen by the caller. --
+  kyoto/highlight/.style={
+    rounded corners=3pt,
+    draw=KyotoTheme,
+    fill=KyotoTheme,
+    fill opacity=.10,
+    line width=.8pt,
+    inner sep=4pt,
+  },
+  kyoto/highlight alert/.style={
+    kyoto/highlight,
+    draw=KyotoEmph,
+    fill=KyotoEmph,
   },
 }
 

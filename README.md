@@ -144,7 +144,7 @@ plain TikZ nodes/paths, using TikZ's own geometry mechanisms
 
 | Style | Use |
 |---|---|
-| `kyoto/box` | A node with rounded corners, solid navy fill, light text (filled by default). |
+| `kyoto/box` | A node with rounded corners, solid navy fill, light text, subtle drop shadow (filled by default). |
 | `kyoto/box alert` | Same geometry, solid red (alert) fill. |
 | `kyoto/box secondary` | Same geometry, solid muted-gray fill. |
 | `kyoto/box outline` | Same geometry, light fill, navy border, dark text. |
@@ -155,10 +155,12 @@ plain TikZ nodes/paths, using TikZ's own geometry mechanisms
 | `kyoto/arrow alert` | Same geometry, red. |
 | `kyoto/arrow secondary` | Same geometry, muted gray. |
 | `kyoto/arrow dashed` | Same as `kyoto/arrow`, dashed. |
-| `kyoto/callout` | A rounded rectangular callout (via `shapes.callouts`), same appearance as `kyoto/box` (filled by default). |
+| `kyoto/callout` | A rounded rectangular callout (via `shapes.callouts`), same appearance as `kyoto/box` (filled by default, drop shadow included). |
 | `kyoto/callout alert` | Same geometry, red (alert) fill. |
 | `kyoto/callout outline` | Same as `kyoto/callout`, but the `kyoto/box outline` appearance. |
 | `kyoto/callout outline alert` | Same as `kyoto/callout outline`, red (alert) border. |
+| `kyoto/highlight` | A generic translucent navy region (rounded corners, light fill, solid border) for highlighting a group of existing nodes via `fit=`. |
+| `kyoto/highlight alert` | Same geometry, red (alert) border/fill. |
 
 ```latex
 \begin{tikzpicture}
@@ -183,6 +185,32 @@ placement stay ordinary TikZ -- the Kyoto style only sets appearance:
 ] at (3,2) {Relevant state};
 ```
 
+### Highlighting node groups
+
+`kyoto/highlight` and `kyoto/highlight alert` are generic, translucent
+regions for calling out an existing group of nodes -- they impose no
+table, automaton, or observation-table API. The library loads TikZ's
+`fit` and `backgrounds` libraries for this; *which* nodes are enclosed
+is chosen entirely by TikZ's own `fit=(...)` option, and *which layer*
+the highlight is drawn on is chosen explicitly by the caller (the style
+does not force the background layer itself):
+
+```latex
+\node[kyoto/box] (a) {A};
+\node[kyoto/box, right=of a] (b) {B};
+
+\begin{scope}[on background layer]
+  \node[kyoto/highlight, fit=(a)(b)] {};
+\end{scope}
+```
+
+Because `fit` works on any TikZ node, the same styles highlight a row
+or region of a `matrix of nodes` (e.g. an observation-table-like
+diagram) or a group of automaton states -- see
+`examples/tikz-demo.tex` for both. `matrix` is not loaded by the Kyoto
+library itself; load it yourself (`\usetikzlibrary{matrix}`) where
+needed.
+
 The library also works without the Kyoto Beamer theme loaded (e.g. in
 a bare `standalone` document): it reuses the theme's colors if they
 are already defined, and only falls back to its own copies of the same
@@ -194,8 +222,10 @@ own `state`/`initial`/`accepting` styles and annotate them with Kyoto
 callouts; Kyoto deliberately does not redefine automata styles.
 
 See `examples/tikz-demo.tex` for a fuller demo (box/arrow variants,
-curved arrows, labels, dashed arrows, `positioning` usage, callouts,
-and a standard TikZ automaton annotated with a Kyoto callout).
+curved arrows, labels, dashed arrows, `positioning` usage, callouts, a
+standard TikZ automaton annotated with a Kyoto callout, and
+`kyoto/highlight`/`kyoto/highlight alert` used on a node group, a
+`matrix of nodes`, and an automaton).
 
 ## License
 
