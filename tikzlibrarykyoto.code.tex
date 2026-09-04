@@ -27,7 +27,7 @@
 %% theme has not defined them) and reuses the theme's palette without
 %% redefinition when it has.
 %% ------------------------------------------------------------------------
-\ProvidesFile{tikzlibrarykyoto.code.tex}[2026-09-04 v1.4 Kyoto TikZ library]
+\ProvidesFile{tikzlibrarykyoto.code.tex}[2026-09-04 v1.5 Kyoto TikZ library]
 
 \RequirePackage{xcolor}
 
@@ -58,19 +58,26 @@
 %% Public styles, namespaced under kyoto/. No fixed width/height, so
 %% these compose with user-supplied `minimum width=', `text width=',
 %% `align=', `right=of', etc.
+%%
+%% Keys under `kyoto/internal/...' (below) are implementation details
+%% shared between two or more public styles -- not documented, not
+%% part of the public API, and free to change shape or disappear
+%% between versions without notice. Every other `kyoto/...' key in
+%% this file (and listed in README.md's style table) is public API:
+%% those are the only keys user documents should depend on.
 %% ------------------------------------------------------------------
 \tikzset{
   %% Boxes -- shared geometry, filled appearance by default -----------
-  kyoto/box base/.style={
+  kyoto/internal/box base/.style={
     rounded corners=3pt,
     line width=1pt,
     align=center,
     inner sep=8pt,
   },
   %% Subtle drop shadow, used by the filled box/callout appearance only
-  %% (kyoto/box) -- the outline variants (kyoto/box base + light fill)
-  %% stay flat. ---------------------------------------------------------
-  kyoto/shadow/.style={
+  %% (kyoto/box) -- the outline variants (kyoto/internal/box base +
+  %% light fill) stay flat. ----------------------------------------
+  kyoto/internal/shadow/.style={
     drop shadow={
       shadow xshift=1pt,
       shadow yshift=-1pt,
@@ -79,8 +86,8 @@
     },
   },
   kyoto/box/.style={
-    kyoto/box base,
-    kyoto/shadow,
+    kyoto/internal/box base,
+    kyoto/internal/shadow,
     draw=KyotoTheme,
     fill=KyotoTheme,
     text=KyotoBg,
@@ -97,7 +104,7 @@
   },
   %% Outline variants: light fill, colored border, dark text ----------
   kyoto/box outline/.style={
-    kyoto/box base,
+    kyoto/internal/box base,
     draw=KyotoTheme,
     fill=KyotoBg,
     text=KyotoFg,

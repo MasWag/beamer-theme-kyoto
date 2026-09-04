@@ -21,6 +21,7 @@ add it to the appropriate section below.
 
 - `examples/demo.tex`
 - `examples/tikz-demo.tex`
+- `examples/tikz-standalone.tex`
 - `examples/latexmkrc`
 - `examples/images/dummy-university-logo.pdf`
 

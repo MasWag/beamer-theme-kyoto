@@ -11,14 +11,22 @@ jobs:
       - uses: actions/checkout@v4
 
       # Explicit TeX Live package set instead of texlive-full, derived
-      # from what examples/demo.tex and examples/tikz-demo.tex actually
-      # pull in (checked against their .log files and each package's
-      # TeX Live "collection" via `tlmgr info`):
+      # from what examples/demo.tex, examples/tikz-demo.tex and
+      # examples/tikz-standalone.tex actually pull in (checked against
+      # their .log files and each package's TeX Live "collection" via
+      # `tlmgr info`):
       #   texlive-latex-base         core LaTeX (hyperref, geometry,
       #                              kvoptions, etoolbox, amsmath, ...)
       #   texlive-latex-recommended  beamer itself, translator, xcolor,
       #                              fontspec, xkeyval
-      #   texlive-latex-extra        everyhook (beamer's font-size hooks)
+      #   texlive-latex-extra        everyhook (beamer's font-size
+      #                              hooks); also `standalone' and
+      #                              `preview', which
+      #                              tikz-standalone.tex's
+      #                              `\documentclass[tikz]{standalone}'
+      #                              needs (no Beamer/Kyoto theme file
+      #                              involved -- see that file's own
+      #                              comment)
       #   texlive-pictures           pgf (beamer's own dependency)
       #   texlive-luatex             luaotfload (LuaLaTeX font loading)
       #   texlive-lang-japanese      luatexja / luatexja-fontspec
@@ -63,3 +71,9 @@ jobs:
         with:
           name: tikz-demo-pdf
           path: examples/tikz-demo.pdf
+
+      - name: Upload tikz-standalone.pdf
+        uses: actions/upload-artifact@v4
+        with:
+          name: tikz-standalone-pdf
+          path: examples/tikz-standalone.pdf

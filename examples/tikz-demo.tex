@@ -433,24 +433,20 @@
 % title with a page-relative overlay instead of the normal centered
 % `frametitle' template (suppressed just for this one frame, via the
 % enclosing group below) -- closer to the source slide's title
-% placement. Still the theme's own condensed/bold display typeface
-% (`\kyoto@titlefamily', a private macro of beamerfontthemeKyoto.sty,
-% hence `\makeatletter' locally) at a larger size, so it stays a
-% Kyoto-styled title, just positioned differently.
+% placement. Still the theme's own condensed/bold display typeface,
+% reached through the public `\usebeamerfont{frametitle}' font role
+% (not the private `\kyoto@titlefamily' macro this used before -- no
+% `\makeatletter' needed here as a result) at a larger local size, so
+% it stays a Kyoto-styled title, just positioned differently.
 {%
-% `\makeatletter' must be active before Beamer starts reading the frame
-% body below (Beamer tokenizes/captures a frame's content up front, to
-% support overlay replay, so switching catcodes *inside* the frame body
-% is too late for `\kyoto@titlefamily' there to be read as one token).
-\makeatletter
 \setbeamertemplate{frametitle}{}%
 % Pure white body field for this one frame, matching the source
 % slide's navy/white/navy composition -- overridden locally (and, as
 % `background canvas' is a per-frame template, automatically back to
 % the normal `KyotoBg' on every later frame with no explicit
 % restore). Headline/footline are untouched, so the navy top bar and
-% footer stay exactly as the rest of the theme draws them. Like
-% `\kyoto@titlefamily' above, this must be set *before* `\begin{frame}'
+% footer stay exactly as the rest of the theme draws them. Like the
+% frametitle override above, this must be set *before* `\begin{frame}'
 % -- Beamer paints the background from the template that is active
 % when the frame starts, so setting it inside the frame body is too
 % late to affect that same frame.
@@ -471,7 +467,7 @@
   \begin{tikzpicture}[remember picture, overlay]
     \node[anchor=north west, text=KyotoFg, inner sep=0pt]
       at ([xshift=0.9cm, yshift=-0.6cm]current page.north west)
-      {\kyoto@titlefamily\bfseries\fontsize{29.5pt}{35pt}\selectfont
+      {\usebeamerfont{frametitle}\bfseries\fontsize{29.5pt}{35pt}\selectfont
        Formal modeling is essential};
 
     % A large, deliberately empty gap separates the title from the
@@ -492,7 +488,7 @@
       % the icon column and the automaton at that size, measured via
       % `\settowidth' rather than guessed. ------------------------------
       \node[kyoto/label] at (2.25,0.50)
-        {\kyoto@titlefamily\bfseries\fontsize{14pt}{17pt}\selectfont Formal Modeling};
+        {\usebeamerfont{frametitle}\bfseries\fontsize{14pt}{17pt}\selectfont Formal Modeling};
 
       % ---- Brush arrow: systems -> formal model -----------------------
       \begin{scope}[shift={(1.0,-0.05)}] \showcasebrusharrow{2.5}{0} \end{scope}
@@ -562,8 +558,8 @@
       % substantial, not a tiny regular-weight subtitle (sized to fit
       % the gap above, measured via `\settowidth'). ---------------------
       \node[align=center] at (8.85,0.75)
-        {{\kyoto@titlefamily\bfseries\fontsize{15pt}{18pt}\selectfont Verification}\\[3pt]
-         {\kyoto@titlefamily\bfseries\fontsize{11.5pt}{14pt}\selectfont e.g.\ Model Checking}};
+        {{\usebeamerfont{frametitle}\bfseries\fontsize{15pt}{18pt}\selectfont Verification}\\[3pt]
+         {\usebeamerfont{frametitle}\bfseries\fontsize{11.5pt}{14pt}\selectfont e.g.\ Model Checking}};
 
       % ---- Verification results (right): plain glyphs, not badges ----
       % Plain `\faXmark'/`\faQuestion' map to ordinary Unicode Dingbats
@@ -593,7 +589,6 @@
   \kyotototalpagenum{false}
   \kyotofooter{M. Waga (Kyoto U.)}
 \end{frame}
-\makeatother
 }
 
 \end{document}

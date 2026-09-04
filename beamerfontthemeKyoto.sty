@@ -27,7 +27,7 @@
 %% the theme (and its example) still compile.  Bold corresponds to Noto
 %% Sans Bold / a bold CJK weight.
 %% ------------------------------------------------------------------------
-\ProvidesPackage{beamerfontthemeKyoto}[2026-09-02 v1.0 Kyoto font theme]
+\ProvidesPackage{beamerfontthemeKyoto}[2026-09-04 v1.1 Kyoto font theme]
 
 %% ------------------------------------------------------------------
 %% Element sizes (visually-equivalent Beamer 16:9 values, leading ~1.4).
@@ -93,6 +93,19 @@
 }
 
 \mode<presentation>
+  %% Expose the condensed display family through the public
+  %% `\usebeamerfont'/`\setbeamerfont' mechanism. The `frametitle'
+  %% template above applies `\kyoto@l@frametitle' (hence
+  %% `\kyoto@titlefamily') directly, without going through this beamer
+  %% font role, so registering it here changes nothing about how frame
+  %% titles are drawn -- it only gives outside code (this theme's own
+  %% examples included) a public way to reach the same family, instead
+  %% of reaching into the private `\kyoto@titlefamily' macro. `family='
+  %% (not `family*=') stores its argument as raw font-selecting code,
+  %% which is what a fontspec `\newfontfamily' macro like
+  %% `\kyoto@titlefamily' needs to be here, rather than an NFSS family
+  %% name.
+  \setbeamerfont{frametitle}{family=\kyoto@titlefamily}
   %% Body text at 12pt, with the same 12pt/14.5pt leading standard LaTeX
   %% itself uses for \normalsize at this size (size12.clo).
   \renewcommand\normalsize{\fontsize{12pt}{14.5pt}\selectfont}

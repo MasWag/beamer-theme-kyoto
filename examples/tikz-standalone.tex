@@ -1,0 +1,39 @@
+% examples/tikz-standalone.tex
+%
+% Smoke test for tikzlibrarykyoto.code.tex used completely on its own --
+% no beamer, no `\usetheme{Kyoto}', no beamer...themeKyoto.sty file of
+% any kind. This is what README.md means when it says the TikZ library
+% "works standalone": with no Kyoto Beamer theme loaded, the library
+% falls back to its own copies of the Kyoto colors (see
+% tikzlibrarykyoto.code.tex's `\@ifundefinedcolor' guards) instead of
+% reusing colors the theme would otherwise have defined.
+%
+% Build from the repository root with:
+%
+%   make
+%
+% which runs latexmk (LuaLaTeX) via examples/latexmkrc for all three
+% example PDFs -- no need to install anything into TEXMF or set
+% TEXINPUTS by hand. Equivalently, from this directory:
+% `latexmk tikz-standalone.tex'.
+%
+\documentclass[tikz]{standalone}
+\usetikzlibrary{kyoto}
+
+\begin{document}
+\begin{tikzpicture}[node distance=2cm]
+  \node[kyoto/box] (a) {A};
+  \node[kyoto/box outline alert, right=of a] (b) {B};
+  \draw[kyoto/arrow] (a) -- (b);
+
+  \node[
+    kyoto/callout outline,
+    callout absolute pointer={(b.north)},
+    above=1cm of b,
+  ] {Standalone};
+
+  \begin{scope}[on background layer]
+    \node[kyoto/highlight, fit=(a)(b)] {};
+  \end{scope}
+\end{tikzpicture}
+\end{document}

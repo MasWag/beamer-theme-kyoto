@@ -162,6 +162,12 @@ plain TikZ nodes/paths, using TikZ's own geometry mechanisms
 | `kyoto/highlight` | A generic translucent navy region (rounded corners, light fill, solid border) for highlighting a group of existing nodes via `fit=`. |
 | `kyoto/highlight alert` | Same geometry, red (alert) border/fill. |
 
+The styles above are the public Kyoto TikZ API. `tikzlibrarykyoto.code.tex`
+also defines a couple of `kyoto/internal/...` keys (shared geometry/shadow
+code factored out of two or more public styles) -- those are implementation
+details, not part of the public API, and are not documented here; do not
+depend on them.
+
 ```latex
 \begin{tikzpicture}
   \node[kyoto/box] (a) {Start};
@@ -256,6 +262,14 @@ The library also works without the Kyoto Beamer theme loaded (e.g. in
 a bare `standalone` document): it reuses the theme's colors if they
 are already defined, and only falls back to its own copies of the same
 values otherwise, so the visual result never depends on load order.
+`examples/tikz-standalone.tex` is the minimal smoke-test/example for
+this -- no `beamer`, no `\usetheme{Kyoto}`, no `beamer...themeKyoto.sty`
+file at all:
+
+```latex
+\documentclass[tikz]{standalone}
+\usetikzlibrary{kyoto}
+```
 
 Standard TikZ libraries combine freely with Kyoto -- e.g.
 `\usetikzlibrary{kyoto,automata}` to draw finite automata with TikZ's

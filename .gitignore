@@ -4,6 +4,7 @@ examples/images/kyoto-university-logo.jpeg
 ## Build output (regenerate with `make`, see the repository root Makefile):
 examples/demo.pdf
 examples/tikz-demo.pdf
+examples/tikz-standalone.pdf
 
 ## Core latex/pdflatex auxiliary files:
 *.aux
