@@ -65,11 +65,16 @@ jobs:
       # straight from CTAN into `TEXMFHOME` instead: unlike TeX Live's
       # own system trees, `TEXMFHOME` is scanned live by kpathsea, so no
       # `texhash`/`mktexlsr` step is needed after adding files to it.
+      # Pinned to a single well-maintained mirror (mirrors.mit.edu)
+      # rather than the `mirrors.ctan.org`/`ctan.org` auto-redirect
+      # service: that service 307s to a geo-selected volunteer mirror
+      # that varies run to run, and one such pick failed here with a
+      # broken TLS certificate chain.
       - name: Install fontawesome6 (not packaged for Ubuntu's TeX Live)
         run: |
           texmfhome="$(kpsewhich -var-value TEXMFHOME)"
           mkdir -p "$texmfhome/tex" "$texmfhome/fonts/opentype"
-          base=https://mirrors.ctan.org/fonts/fontawesome6
+          base=https://mirrors.mit.edu/CTAN/fonts/fontawesome6
           for f in fontawesome6.sty fontawesome6-utex-helper.sty \
                    fontawesome6-mapping.def fontawesome6.lua \
                    tufontawesome6free.fd tufontawesome6brands.fd; do
