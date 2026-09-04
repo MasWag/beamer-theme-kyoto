@@ -11,9 +11,9 @@ jobs:
       - uses: actions/checkout@v4
 
       # Explicit TeX Live package set instead of texlive-full, derived
-      # from what examples/demo.tex actually pulls in (checked against
-      # examples/demo.log and each package's TeX Live "collection" via
-      # `tlmgr info`):
+      # from what examples/demo.tex and examples/tikz-demo.tex actually
+      # pull in (checked against their .log files and each package's
+      # TeX Live "collection" via `tlmgr info`):
       #   texlive-latex-base         core LaTeX (hyperref, geometry,
       #                              kvoptions, etoolbox, amsmath, ...)
       #   texlive-latex-recommended  beamer itself, translator, xcolor,
@@ -24,8 +24,11 @@ jobs:
       #   texlive-lang-japanese      luatexja / luatexja-fontspec
       #   texlive-fonts-recommended  Latin Modern (this theme's monospace
       #                              font, not just a fallback)
-      #   texlive-fonts-extra        Noto Sans / Roboto Condensed, bundled
-      #                              by TeX Live as plain font files
+      #   texlive-fonts-extra        Noto Sans / Roboto Condensed (plain
+      #                              font files bundled by TeX Live) and
+      #                              `fontawesome6', used only by the
+      #                              "Formal modeling is essential"
+      #                              showcase frame in tikz-demo.tex
       # Noto's CJK fonts are a separate apt package: TeX Live does not
       # bundle them itself, so without `fonts-noto-cjk`, \setmainjfont
       # would fall back to a font that only exists on the maintainer's

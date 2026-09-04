@@ -15,6 +15,17 @@
 \usetikzlibrary{kyoto}
 \usetikzlibrary{automata}
 \usetikzlibrary{matrix}
+\usetikzlibrary{calc}
+\usetikzlibrary{decorations.pathmorphing}
+
+% Font Awesome 6 is a standard external icon package, not a Kyoto
+% dependency -- it is loaded here, by this demo, like any other
+% domain-specific asset package a talk might need (see the "Formal
+% modeling is essential" showcase frame below). Kyoto itself neither
+% requires nor knows about it.
+\usepackage{fontawesome6}
+% For \rotatebox (upright rocket icon in the showcase frame below).
+\usepackage{graphicx}
 
 \begin{document}
 
@@ -365,5 +376,224 @@
     \visible<2->{\node[kyoto/box, right=of l2] (r2) {B};}
   \end{tikzpicture}
 \end{frame}
+
+% 15. Realistic showcase: "Formal modeling is essential" -----------------
+% Reproduces the visual idea of QEST+FORMATS 2026 slide 2 (systems ->
+% formal model -> verification -> results) in the Kyoto 16:9 style.
+% Icons come from the standard `fontawesome6' package (loaded above,
+% not by Kyoto itself); the automaton and the brush arrows are plain
+% TikZ, styled locally with Kyoto colors -- no new kyoto/... styles.
+
+% Local helper: a broad brush/paint-stroke arrow, drawn left-to-right
+% from the current origin. This is a SINGLE filled arrow silhouette
+% (a rectangular shaft plus a triangular head, in one closed path) --
+% not several overlapping stroked lines (that earlier approach left a
+% visible seam where the strokes' round caps met the head, and read as
+% a smooth rounded capsule rather than a brush mark). Texture instead
+% comes from TikZ's own `decorations.pathmorphing' `random steps'
+% applied directly to that silhouette's OUTLINE, at a small amplitude:
+% it perturbs the boundary into a torn/dry-brush edge while the filled
+% interior -- and hence the arrow's overall straight, horizontal
+% direction -- is untouched (unlike decorating a thin centerline
+% stroke, which is what produced the earlier lightning-bolt look).
+% #1 is the total length in the picture's own coordinate units; #2 is
+% 0 or 1, giving the two arrows in this showcase slightly different
+% roughness instead of looking like exact copies. Used inside a
+% `shift'ed scope so it always points right from (0,0). Local to this
+% showcase only, not a kyoto/... style.
+\newcommand{\showcasebrusharrow}[2]{%
+  \pgfmathsetmacro{\sbaLen}{#1}%
+  \pgfmathsetmacro{\sbaHeadLen}{0.60}%
+  \pgfmathsetmacro{\sbaShaft}{\sbaLen-\sbaHeadLen}%
+  \ifnum#2=0
+    \def\sbaSeg{0.9mm}\def\sbaAmp{0.32mm}%
+  \else
+    \def\sbaSeg{0.7mm}\def\sbaAmp{0.26mm}%
+  \fi
+  \path[
+    fill=KyotoTheme, line join=round,
+    decorate, decoration={random steps, segment length=\sbaSeg, amplitude=\sbaAmp},
+  ]
+    (0,        0.17) -- (\sbaShaft, 0.17) --
+    (\sbaShaft, 0.34) -- (\sbaLen,  0)    --
+    (\sbaShaft,-0.34) -- (\sbaShaft,-0.17) --
+    (0,       -0.17) -- cycle;
+}
+
+% Local helper: four small square dots (the source slide's vertical
+% "more of these" ellipsis, not a typographic \vdots). #1,#2 is the
+% (x,y) center of the 4-dot stack in the picture's own coordinates.
+\newcommand{\showcasesquaredots}[2]{%
+  \foreach \ssdO in {-1.5,-0.5,0.5,1.5}{
+    \fill[KyotoFg] (#1-0.032,#2+0.15*\ssdO-0.032) rectangle ++(0.064,0.064);
+  }
+}
+
+% Local frame title: this showcase draws its own large, LEFT-aligned
+% title with a page-relative overlay instead of the normal centered
+% `frametitle' template (suppressed just for this one frame, via the
+% enclosing group below) -- closer to the source slide's title
+% placement. Still the theme's own condensed/bold display typeface
+% (`\kyoto@titlefamily', a private macro of beamerfontthemeKyoto.sty,
+% hence `\makeatletter' locally) at a larger size, so it stays a
+% Kyoto-styled title, just positioned differently.
+{%
+% `\makeatletter' must be active before Beamer starts reading the frame
+% body below (Beamer tokenizes/captures a frame's content up front, to
+% support overlay replay, so switching catcodes *inside* the frame body
+% is too late for `\kyoto@titlefamily' there to be read as one token).
+\makeatletter
+\setbeamertemplate{frametitle}{}%
+% Pure white body field for this one frame, matching the source
+% slide's navy/white/navy composition -- overridden locally (and, as
+% `background canvas' is a per-frame template, automatically back to
+% the normal `KyotoBg' on every later frame with no explicit
+% restore). Headline/footline are untouched, so the navy top bar and
+% footer stay exactly as the rest of the theme draws them. Like
+% `\kyoto@titlefamily' above, this must be set *before* `\begin{frame}'
+% -- Beamer paints the background from the template that is active
+% when the frame starts, so setting it inside the frame body is too
+% late to affect that same frame.
+\setbeamertemplate{background canvas}{%
+  {\color{white}\vrule width\paperwidth height\paperheight}%
+}%
+\begin{frame}
+  % Everything below -- title and diagram alike -- is placed with
+  % page-relative TikZ coordinates in a single `remember picture,
+  % overlay' picture, rather than through the normal frame-body flow
+  % (`\centering'/`\resizebox' of a second, separately-flowed
+  % tikzpicture, as this frame first tried): a frame with no
+  % `\frametitle' still leaves Beamer's usual flexible top-alignment
+  % glue in the body, which silently absorbed any amount of
+  % `\vspace' placed before that second picture. Anchoring everything
+  % to `current page' sidesteps that entirely and gives this showcase
+  % exact, reproducible placement.
+  \begin{tikzpicture}[remember picture, overlay]
+    \node[anchor=north west, text=KyotoFg, inner sep=0pt]
+      at ([xshift=0.9cm, yshift=-0.6cm]current page.north west)
+      {\kyoto@titlefamily\bfseries\fontsize{29.5pt}{35pt}\selectfont
+       Formal modeling is essential};
+
+    % A large, deliberately empty gap separates the title from the
+    % diagram below (as on the source slide) -- the diagram sits in
+    % the lower two-thirds of the frame, not vertically centered.
+    \begin{scope}[
+        shift={([xshift=1.3cm, yshift=-5.95cm]current page.north west)},
+        scale=1.15,
+      ]
+      % ---- Concrete systems (left): car, upright rocket, ... ---------
+      \node[kyoto/label] (car)    at (0,1.15) {\scalebox{1.28}{\Huge\faCar}};
+      \node[kyoto/label] (rocket) at (0,0)     {\scalebox{1.28}{\Huge\rotatebox{45}{\faRocket}}};
+      \showcasesquaredots{0}{-1.15}
+
+      % ---- Formal Modeling: one line, bold/condensed, HORIZONTALLY
+      % CENTERED above the first arrow (centered on the arrow's own
+      % midpoint, not left-aligned) -- sized to fit the gap between
+      % the icon column and the automaton at that size, measured via
+      % `\settowidth' rather than guessed. ------------------------------
+      \node[kyoto/label] at (2.25,0.50)
+        {\kyoto@titlefamily\bfseries\fontsize{14pt}{17pt}\selectfont Formal Modeling};
+
+      % ---- Brush arrow: systems -> formal model -----------------------
+      \begin{scope}[shift={(1.0,-0.05)}] \showcasebrusharrow{2.5}{0} \end{scope}
+
+      % ---- Formal model: a wider, right-branching, bold black sketch-
+      % automaton -- deliberately not the navy filled `kyoto/box'/
+      % `state' look used elsewhere in this demo: the source slide's
+      % model diagram is a plain, bold, black hand-drawn sketch, with
+      % a top-to-bottom spine plus a state branching off to the right.
+      \begin{scope}[
+          shift={(5.55,0.05)},
+          % Unfilled (white) states with the default, unspecified
+          % arrow tip -- not `Stealth' -- read as an open, hand-drawn
+          % "V" mark rather than a solid geometric triangle, much
+          % closer to the source slide's sketch than a filled arrow
+          % family; `arrows.meta' (loaded for `kyoto/arrow' elsewhere
+          % in this demo) does not change what a plain `->' looks like
+          % unless a tip is explicitly requested.
+          every state/.style={draw=KyotoFg, line width=1.5pt, fill=white, minimum size=7mm, inner sep=0pt},
+          ->, line width=1.5pt, draw=KyotoFg,
+        ]
+        \node[state]                     (q0)  at (0.05,1.35)  {};
+        \node[state]                     (q1)  at (0.05,0.55)  {};
+        \node[state]                     (q2)  at (0.00,-0.30) {};
+        \node[state]                     (q3)  at (0.95,-0.35) {};
+        \node[state, minimum size=8mm]   (bad) at (0.40,-1.55) {};
+
+        % Incoming arrow from above into q0.
+        \draw (q0)++(0,0.55) -- (q0);
+
+        % Bend angles/loop sizes deliberately vary from one transition
+        % to the next (rather than all matching) for a more
+        % hand-arranged, less algorithmically-neat feel.
+        \draw (q0)  edge[loop right, min distance=6mm]   (q0)
+              (q0)  edge[bend right=7]                   (q1)
+              (q1)  edge[bend left=9]                    (q2)
+              (q1)  edge[bend left=35]                   (q3)
+              (q2)  edge[bend left=6]                    (q3)
+              (q3)  edge[loop right, min distance=6mm]   (q3)
+              (q3)  edge[bend right=8]                   (bad)
+              (q2)  edge[bend right=14]                  (bad)
+              (bad) edge[loop right, min distance=7mm]   (bad)
+              % One large curved return sweeping around the left side
+              % of the vertical spine, back up to the top state.
+              (bad) edge[bend left=55, looseness=1.5]    (q0);
+
+        % Unhappy face inside the bad state -- two eyes and a downward
+        % (concave-down) curved mouth, all plain TikZ via `calc'.
+        \fill ($(bad.center)+(-0.13,0.09)$) circle (0.55mm);
+        \fill ($(bad.center)+( 0.13,0.09)$) circle (0.55mm);
+        \draw[line width=1.1pt, -] ($(bad.center)+(-0.15,-0.12)$)
+          to[bend left=55] ($(bad.center)+(0.15,-0.12)$);
+      \end{scope}
+
+      % ---- Brush arrow: formal model -> verification -------------------
+      % Shifted right of where this arrow started before (was 7.25):
+      % that left the automaton's own rightmost bulge (the q3 self-loop
+      % plus the big return curve) only ~0.9 units from this arrow's
+      % centered label, too little room for centered bold text without
+      % shrinking it past legibility -- widening this gap, rather than
+      % just left-aligning the label to dodge the overlap, is what
+      % "make them smaller"/"must be centered" both actually call for.
+      \begin{scope}[shift={(7.85,-0.05)}] \showcasebrusharrow{2.0}{1} \end{scope}
+
+      % ---- Verification / e.g. Model Checking: bold/condensed,
+      % HORIZONTALLY CENTERED above the arrow -- both lines visually
+      % substantial, not a tiny regular-weight subtitle (sized to fit
+      % the gap above, measured via `\settowidth'). ---------------------
+      \node[align=center] at (8.85,0.75)
+        {{\kyoto@titlefamily\bfseries\fontsize{15pt}{18pt}\selectfont Verification}\\[3pt]
+         {\kyoto@titlefamily\bfseries\fontsize{11.5pt}{14pt}\selectfont e.g.\ Model Checking}};
+
+      % ---- Verification results (right): plain glyphs, not badges ----
+      % Plain `\faXmark'/`\faQuestion' map to ordinary Unicode Dingbats
+      % codepoints (U+2754, U+274C) that this theme's luatexja setup
+      % classifies as JAchar (kanji) by default -- Miscellaneous
+      % Symbols/Dingbats are in luatexja's predefined character range
+      % 3, which is JAchar by default -- so it substitutes the CJK
+      % font and the glyph goes missing there. Locally marking that
+      % one range as ALchar (`jacharrange={-3}', undone at the end of
+      % this TeX group) keeps these three glyphs on the FontAwesome
+      % font, without touching luatexja's setup anywhere else in the
+      % document.
+      {%
+      \ltjsetparameter{jacharrange={-3}}%
+      \node[text=green!55!black]  at (11.85,1.20)  {\Huge\faCheck};
+      \node[text=KyotoEmph]       at (11.85,0.55)  {\Huge\faXmark};
+      \node[text=orange!85!black] at (11.85,-0.20) {\Huge\faQuestion};
+      }%
+      \node[kyoto/label] at (11.85,-0.75) {\fontsize{13pt}{15pt}\selectfont Prob.};
+      \node[kyoto/label] at (11.85,-1.15) {\fontsize{13pt}{15pt}\selectfont Param.};
+      \showcasesquaredots{11.85}{-1.75}
+    \end{scope}
+  \end{tikzpicture}
+
+  % Footer: a plain page number and a fixed right-hand credit, as on
+  % the source slide, for this final demo frame only.
+  \kyotototalpagenum{false}
+  \kyotofooter{M. Waga (Kyoto U.)}
+\end{frame}
+\makeatother
+}
 
 \end{document}

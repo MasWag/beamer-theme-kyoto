@@ -260,7 +260,10 @@ values otherwise, so the visual result never depends on load order.
 Standard TikZ libraries combine freely with Kyoto -- e.g.
 `\usetikzlibrary{kyoto,automata}` to draw finite automata with TikZ's
 own `state`/`initial`/`accepting` styles and annotate them with Kyoto
-callouts; Kyoto deliberately does not redefine automata styles.
+callouts; Kyoto deliberately does not redefine automata styles. The
+same goes for icon packages such as `fontawesome6`: Kyoto has no icon
+API of its own, so a talk that wants pictograms just loads the package
+it needs and colors icons with the Kyoto palette like any other text.
 
 See `examples/tikz-demo.tex` for a fuller demo (box/arrow variants,
 curved arrows, labels, dashed arrows, `positioning` usage, callouts, a
@@ -269,7 +272,11 @@ standard TikZ automaton annotated with a Kyoto callout,
 `matrix of nodes`, and an automaton, and standard Beamer overlays --
 `\visible`/`\uncover`/`\alt` -- composed with Kyoto styles for a
 progressive reveal, a highlight appearing on a later overlay, and a
-side-by-side `\only`-vs-`\visible` geometry comparison).
+side-by-side `\only`-vs-`\visible` geometry comparison) -- including a
+realistic "Formal modeling is essential" showcase frame that combines
+`fontawesome6` icons, a hand-drawn-looking automaton, and rough
+brush-style arrows (all built from ordinary TikZ, styled locally with
+Kyoto colors).
 
 ## License
 
