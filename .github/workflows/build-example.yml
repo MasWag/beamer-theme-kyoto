@@ -33,10 +33,7 @@ jobs:
       #   texlive-fonts-recommended  Latin Modern (this theme's monospace
       #                              font, not just a fallback)
       #   texlive-fonts-extra        Noto Sans / Roboto Condensed (plain
-      #                              font files bundled by TeX Live) and
-      #                              `fontawesome6', used only by the
-      #                              "Formal modeling is essential"
-      #                              showcase frame in tikz-demo.tex
+      #                              font files bundled by TeX Live)
       # Noto's CJK fonts are a separate apt package: TeX Live does not
       # bundle them itself, so without `fonts-noto-cjk`, \setmainjfont
       # would fall back to a font that only exists on the maintainer's
@@ -56,6 +53,32 @@ jobs:
             texlive-fonts-extra \
             latexmk \
             fonts-noto-cjk
+
+      # `fontawesome6' -- used only by the "Formal modeling is
+      # essential" showcase frame in tikz-demo.tex -- is not packaged
+      # for Ubuntu's TeX Live at all (confirmed via
+      # https://packages.ubuntu.com/search?searchon=contents&keywords=fontawesome6.sty),
+      # and `tlmgr` refuses to manage a Debian/Ubuntu apt-installed TeX
+      # Live tree, so neither `apt-get` nor `tlmgr install` can provide
+      # it here. Fetch just the LuaLaTeX-relevant files (matches what
+      # examples/tikz-demo.log shows actually getting loaded locally)
+      # straight from CTAN into `TEXMFHOME` instead: unlike TeX Live's
+      # own system trees, `TEXMFHOME` is scanned live by kpathsea, so no
+      # `texhash`/`mktexlsr` step is needed after adding files to it.
+      - name: Install fontawesome6 (not packaged for Ubuntu's TeX Live)
+        run: |
+          texmfhome="$(kpsewhich -var-value TEXMFHOME)"
+          mkdir -p "$texmfhome/tex" "$texmfhome/fonts/opentype"
+          base=https://mirrors.ctan.org/fonts/fontawesome6
+          for f in fontawesome6.sty fontawesome6-utex-helper.sty \
+                   fontawesome6-mapping.def fontawesome6.lua \
+                   tufontawesome6free.fd tufontawesome6brands.fd; do
+            curl -sSfL -o "$texmfhome/tex/$f" "$base/tex/$f"
+          done
+          for f in FontAwesome6Free-Solid-900.otf \
+                   FontAwesome6Brands-Regular-400.otf; do
+            curl -sSfL -o "$texmfhome/fonts/opentype/$f" "$base/opentype/$f"
+          done
 
       - name: Build examples
         run: make
