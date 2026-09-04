@@ -211,6 +211,47 @@ diagram) or a group of automaton states -- see
 library itself; load it yourself (`\usetikzlibrary{matrix}`) where
 needed.
 
+### Beamer overlays
+
+Kyoto does not implement its own overlay API -- no `visible on`,
+`alert on`, or similar -- because standard Beamer overlay commands
+already compose with the `kyoto/...` styles with nothing extra needed.
+`\only`, `\visible`, `\uncover`, `\onslide`, and `\alt` all work
+normally on nodes and paths built from Kyoto styles:
+
+```latex
+\visible<2->{%
+  \draw[kyoto/arrow] (a) -- (b);
+}
+\visible<3->{%
+  \node[kyoto/highlight alert, fit=(a)(b)] {};
+}
+```
+
+`\visible`/`\uncover` keep the wrapped material's space and geometry
+on every overlay (only its ink is hidden outside the given range), so
+node positions and later `fit=(...)` references stay valid throughout
+-- prefer them whenever a diagram's layout must not move between
+overlays. `\only` instead omits its argument entirely outside the
+given range: the wrapped node is never created there, which can shift
+the `tikzpicture`'s bounding box (and anything positioned relative to
+that node) between overlays, and referencing that node's name outside
+its range is an error. `\only` is fine for material nothing else
+depends on positionally.
+
+One caveat worth knowing: TikZ's `on background layer` (from the
+`backgrounds` library, used by the highlight styles above) defers its
+content into a box that is only flushed to the page at the end of the
+`tikzpicture` -- after `\visible`'s invisibility span has already
+closed -- so a highlight wrapped in both `\visible<...>` and
+`on background layer` would ignore the overlay range and show on
+every slide. When a `kyoto/highlight` needs to appear on a later
+overlay, draw it in the foreground (no `on background layer`) instead;
+its low fill opacity keeps it legible over the content it encloses.
+See `examples/tikz-demo.tex` for progressive-reveal, highlight-appears-
+later, and `\only`-vs-`\visible` geometry examples, no extra overlay
+TikZ library required.
+
 The library also works without the Kyoto Beamer theme loaded (e.g. in
 a bare `standalone` document): it reuses the theme's colors if they
 are already defined, and only falls back to its own copies of the same
@@ -223,9 +264,12 @@ callouts; Kyoto deliberately does not redefine automata styles.
 
 See `examples/tikz-demo.tex` for a fuller demo (box/arrow variants,
 curved arrows, labels, dashed arrows, `positioning` usage, callouts, a
-standard TikZ automaton annotated with a Kyoto callout, and
+standard TikZ automaton annotated with a Kyoto callout,
 `kyoto/highlight`/`kyoto/highlight alert` used on a node group, a
-`matrix of nodes`, and an automaton).
+`matrix of nodes`, and an automaton, and standard Beamer overlays --
+`\visible`/`\uncover`/`\alt` -- composed with Kyoto styles for a
+progressive reveal, a highlight appearing on a later overlay, and a
+side-by-side `\only`-vs-`\visible` geometry comparison).
 
 ## License
 

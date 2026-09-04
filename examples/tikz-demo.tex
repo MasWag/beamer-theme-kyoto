@@ -240,4 +240,130 @@
   \end{tikzpicture}
 \end{frame}
 
+% ------------------------------------------------------------------------
+% Beamer overlays: standard \only/\visible/\uncover/\onslide/\alt compose
+% with the Kyoto styles above with no Kyoto-specific overlay API -- Kyoto
+% standardizes appearance, TikZ controls geometry, Beamer controls
+% overlays. A node/path command wrapped in \visible<..>{...} or
+% \uncover<..>{...} is still fully typeset (and so keeps its bounding box
+% and its name resolvable by later \draw/fit references) on every
+% overlay; only its ink is hidden outside the given range. \only<..>{...}
+% instead omits its argument entirely outside the range: the wrapped
+% node is never created there, so the tikzpicture's bounding box (and
+% anything positioned or `fit' relative to that node) can shift between
+% overlays, and referencing that node's name outside its range is an
+% error. See frame "Only vs visible" below for a visible side-by-side
+% comparison. Prefer \visible/\uncover whenever a diagram's layout must
+% stay put across overlays; \only is fine for material nothing else
+% depends on positionally.
+% ------------------------------------------------------------------------
+
+% 11. Progressive reveal: Learner and Oracle -----------------------------
+\begin{frame}{Progressive reveal: Learner and Oracle}
+  \centering
+  \begin{tikzpicture}[node distance=2.5cm]
+    \node[kyoto/box] (learner) {Learner};
+
+    % \alt<spec>{A}{B} only expands safely as ordinary typeset content
+    % (e.g. node text below) -- not as a bare style *name* inside a
+    % TikZ [...] option list, where pgfkeys needs to fully expand and
+    % namespace-resolve the key itself.
+    \visible<2->{%
+      \node[kyoto/box alert, right=of learner] (oracle) {\alt<4->{Oracle!}{Oracle}};
+    }
+
+    \visible<3->{%
+      \draw[kyoto/arrow] (learner) to[bend left]
+        node[kyoto/label, above] {Query} (oracle);
+    }
+
+    \uncover<4->{%
+      \draw[kyoto/arrow alert] (oracle) to[bend left]
+        node[kyoto/label, below] {Counterexample} (learner);
+    }
+  \end{tikzpicture}
+\end{frame}
+
+% 12. Highlight appearing on a later overlay -----------------------------
+% `on background layer' defers its content into a separate box that is
+% only flushed to the page at \end{tikzpicture} -- *after* \visible's
+% invisibility span for this group has already closed -- so a highlight
+% wrapped in both \visible<..> and `on background layer' would leak
+% through on every overlay regardless of the given range. `fit' still
+% needs (a)(b) to exist first, so painting after them (foreground, not
+% background) is what makes the reveal itself overlay-correct here; the
+% highlight's low fill opacity keeps it legible on top of the boxes.
+\begin{frame}{Highlight appearing on a later overlay}
+  \centering
+  \begin{tikzpicture}[node distance=2cm]
+    \node[kyoto/box] (a) {A};
+    \node[kyoto/box, right=of a] (b) {B};
+    \node[kyoto/box, right=of b] (c) {C};
+
+    \draw[kyoto/arrow] (a) -- (b);
+    \draw[kyoto/arrow] (b) -- (c);
+
+    \visible<2->{%
+      \node[kyoto/highlight alert, fit=(a)(b)] {};
+    }
+  \end{tikzpicture}
+\end{frame}
+
+% 13. Standard TikZ automaton with progressive annotation ----------------
+\begin{frame}{Automaton: progressive annotation}
+  \centering
+  \begin{tikzpicture}[
+      ->,
+      >={Stealth[length=2.5mm, width=2mm]},
+      node distance=3cm,
+      initial text={},
+      every state/.style={draw=KyotoTheme, text=KyotoFg, fill=KyotoBg},
+    ]
+    \node[state, initial] (q0) {$q_0$};
+    \node[state, accepting, right=of q0] (q1) {$q_1$};
+
+    \draw (q0) edge[bend left] node[kyoto/label, above] {$a$} (q1)
+          (q1) edge[bend left] node[kyoto/label, below] {$b$} (q0);
+
+    % Foreground, not `on background layer' -- see the comment on the
+    % previous frame: background-layer content is flushed after
+    % \visible's invisibility span closes, so it would ignore the <2->.
+    \visible<2->{%
+      \node[kyoto/highlight alert, fit=(q0)(q1)] {};
+    }
+
+    \visible<3->{%
+      \node[
+        kyoto/callout,
+        callout absolute pointer={(q1.north)},
+        above right=1.2cm and -0.5cm of q1,
+        text width=3cm,
+      ] {Accepting state};
+    }
+  \end{tikzpicture}
+\end{frame}
+
+% 14. \only vs \visible: overlay geometry --------------------------------
+% \only<2->{\node ... (r1) {B};} below exists on overlay 1 too, so this
+% frame relies on nothing referencing (r1)/(r2) by name -- exactly the
+% kind of reference that would fail for a node inside \only outside its
+% range. Watch the "only<2->" picture recenter as its bounding box grows
+% on overlay 2 (the "B" box did not exist, hence contributed nothing to
+% the box, on overlay 1); the "visible<2->" picture never moves, since
+% \visible reserves (r2)'s space on every overlay and only toggles ink.
+\begin{frame}{Only vs visible: overlay geometry}
+  \centering
+  \begin{tikzpicture}[node distance=1.2cm]
+    \node[kyoto/box outline] (l1) {only<2->};
+    \only<2->{\node[kyoto/box, right=of l1] (r1) {B};}
+  \end{tikzpicture}
+
+  \vspace{0.6cm}
+
+  \begin{tikzpicture}[node distance=1.2cm]
+    \node[kyoto/box outline] (l2) {visible<2->};
+    \visible<2->{\node[kyoto/box, right=of l2] (r2) {B};}
+  \end{tikzpicture}
+\end{frame}
+
 \end{document}
