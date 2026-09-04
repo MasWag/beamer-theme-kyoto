@@ -50,6 +50,28 @@
   \end{tikzpicture}
 \end{frame}
 
+% 3b. All box styles side by side, including the filled variants --------
+\begin{frame}{Box styles compared}
+  \centering
+  \begin{tikzpicture}
+    \node[kyoto/box] (n) {Normal};
+    \node[kyoto/box alert, right=1.2cm of n] (al) {Alert};
+    \node[kyoto/box secondary, right=1.2cm of al] (se) {Secondary};
+    \node[kyoto/box filled, right=1.2cm of se] (fi) {Filled};
+    \node[kyoto/box filled alert, right=1.2cm of fi] (fa) {Filled alert};
+  \end{tikzpicture}
+\end{frame}
+
+% 3c. Filled boxes in a realistic two-node diagram -----------------------
+\begin{frame}{Filled boxes in a diagram}
+  \centering
+  \begin{tikzpicture}[node distance=3cm]
+    \node[kyoto/box filled] (learner) {Learner};
+    \node[kyoto/box filled alert, right=of learner] (oracle) {Oracle};
+    \draw[kyoto/arrow] (learner) -- (oracle);
+  \end{tikzpicture}
+\end{frame}
+
 % 4. Arrow variants: normal vs alert vs secondary, plus dashed ----------
 \begin{frame}{Arrow variants}
   \centering

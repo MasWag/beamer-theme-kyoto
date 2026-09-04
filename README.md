@@ -147,6 +147,8 @@ plain TikZ nodes/paths, using TikZ's own geometry mechanisms
 | `kyoto/box` | A node with rounded corners, navy border, light fill. |
 | `kyoto/box alert` | Same geometry, red (alert) border. |
 | `kyoto/box secondary` | Same geometry, muted gray border. |
+| `kyoto/box filled` | Same geometry, solid navy fill with light text. |
+| `kyoto/box filled alert` | Same geometry, solid red fill with light text. |
 | `kyoto/label` | Unobtrusive colored text for labels on/near arrows. |
 | `kyoto/arrow` | A navy arrow with a modern `arrows.meta` Stealth tip. |
 | `kyoto/arrow alert` | Same geometry, red. |

@@ -27,7 +27,7 @@
 %% theme has not defined them) and reuses the theme's palette without
 %% redefinition when it has.
 %% ------------------------------------------------------------------------
-\ProvidesFile{tikzlibrarykyoto.code.tex}[2026-09-03 v1.0 Kyoto TikZ library]
+\ProvidesFile{tikzlibrarykyoto.code.tex}[2026-09-04 v1.1 Kyoto TikZ library]
 
 \RequirePackage{xcolor}
 
@@ -73,6 +73,17 @@
   kyoto/box secondary/.style={
     kyoto/box,
     draw=KyotoSeparator,
+  },
+  kyoto/box filled/.style={
+    kyoto/box,
+    draw=KyotoTheme,
+    fill=KyotoTheme,
+    text=KyotoBg,
+  },
+  kyoto/box filled alert/.style={
+    kyoto/box filled,
+    draw=KyotoEmph,
+    fill=KyotoEmph,
   },
   %% Labels (text on/near arrows and objects) -------------------------
   kyoto/label/.style={
