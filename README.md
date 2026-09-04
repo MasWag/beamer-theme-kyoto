@@ -144,16 +144,21 @@ plain TikZ nodes/paths, using TikZ's own geometry mechanisms
 
 | Style | Use |
 |---|---|
-| `kyoto/box` | A node with rounded corners, navy border, light fill. |
-| `kyoto/box alert` | Same geometry, red (alert) border. |
-| `kyoto/box secondary` | Same geometry, muted gray border. |
-| `kyoto/box filled` | Same geometry, solid navy fill with light text. |
-| `kyoto/box filled alert` | Same geometry, solid red fill with light text. |
+| `kyoto/box` | A node with rounded corners, solid navy fill, light text (filled by default). |
+| `kyoto/box alert` | Same geometry, solid red (alert) fill. |
+| `kyoto/box secondary` | Same geometry, solid muted-gray fill. |
+| `kyoto/box outline` | Same geometry, light fill, navy border, dark text. |
+| `kyoto/box outline alert` | Same as `kyoto/box outline`, red (alert) border. |
+| `kyoto/box outline secondary` | Same as `kyoto/box outline`, muted gray border. |
 | `kyoto/label` | Unobtrusive colored text for labels on/near arrows. |
 | `kyoto/arrow` | A navy arrow with a modern `arrows.meta` Stealth tip. |
 | `kyoto/arrow alert` | Same geometry, red. |
 | `kyoto/arrow secondary` | Same geometry, muted gray. |
 | `kyoto/arrow dashed` | Same as `kyoto/arrow`, dashed. |
+| `kyoto/callout` | A rounded rectangular callout (via `shapes.callouts`), same appearance as `kyoto/box` (filled by default). |
+| `kyoto/callout alert` | Same geometry, red (alert) fill. |
+| `kyoto/callout outline` | Same as `kyoto/callout`, but the `kyoto/box outline` appearance. |
+| `kyoto/callout outline alert` | Same as `kyoto/callout outline`, red (alert) border. |
 
 ```latex
 \begin{tikzpicture}
@@ -163,13 +168,34 @@ plain TikZ nodes/paths, using TikZ's own geometry mechanisms
 \end{tikzpicture}
 ```
 
+The callout styles reuse TikZ's standard `rectangle callout` shape from
+`shapes.callouts` (loaded by the Kyoto library), styled with the same
+rounded corners, border/fill/text colors, line width and inner padding
+as the matching `kyoto/box` variant -- `kyoto/callout` inherits
+`kyoto/box` (filled), `kyoto/callout outline` inherits `kyoto/box
+outline`, and so on. Pointer direction, pointer target and node
+placement stay ordinary TikZ -- the Kyoto style only sets appearance:
+
+```latex
+\node[
+  kyoto/callout,
+  callout absolute pointer={(target.north)}
+] at (3,2) {Relevant state};
+```
+
 The library also works without the Kyoto Beamer theme loaded (e.g. in
 a bare `standalone` document): it reuses the theme's colors if they
 are already defined, and only falls back to its own copies of the same
 values otherwise, so the visual result never depends on load order.
 
+Standard TikZ libraries combine freely with Kyoto -- e.g.
+`\usetikzlibrary{kyoto,automata}` to draw finite automata with TikZ's
+own `state`/`initial`/`accepting` styles and annotate them with Kyoto
+callouts; Kyoto deliberately does not redefine automata styles.
+
 See `examples/tikz-demo.tex` for a fuller demo (box/arrow variants,
-curved arrows, labels, dashed arrows, `positioning` usage).
+curved arrows, labels, dashed arrows, `positioning` usage, callouts,
+and a standard TikZ automaton annotated with a Kyoto callout).
 
 ## License
 

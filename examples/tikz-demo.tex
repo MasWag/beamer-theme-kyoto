@@ -13,6 +13,7 @@
 \usetheme{Kyoto}
 \usepackage{tikz}
 \usetikzlibrary{kyoto}
+\usetikzlibrary{automata}
 
 \begin{document}
 
@@ -50,24 +51,26 @@
   \end{tikzpicture}
 \end{frame}
 
-% 3b. All box styles side by side, including the filled variants --------
-\begin{frame}{Box styles compared}
+% 3b. Filled (default) vs outline box styles, side by side ---------------
+\begin{frame}{Box styles: filled (default) vs outline}
   \centering
-  \begin{tikzpicture}
+  \begin{tikzpicture}[node distance=1.2cm]
     \node[kyoto/box] (n) {Normal};
     \node[kyoto/box alert, right=1.2cm of n] (al) {Alert};
     \node[kyoto/box secondary, right=1.2cm of al] (se) {Secondary};
-    \node[kyoto/box filled, right=1.2cm of se] (fi) {Filled};
-    \node[kyoto/box filled alert, right=1.2cm of fi] (fa) {Filled alert};
+
+    \node[kyoto/box outline, below=of n] (on) {Outline};
+    \node[kyoto/box outline alert, right=1.2cm of on] (oal) {Outline alert};
+    \node[kyoto/box outline secondary, right=1.2cm of oal] (ose) {Outline secondary};
   \end{tikzpicture}
 \end{frame}
 
-% 3c. Filled boxes in a realistic two-node diagram -----------------------
-\begin{frame}{Filled boxes in a diagram}
+% 3c. Outline boxes in a realistic two-node diagram -----------------------
+\begin{frame}{Outline boxes in a diagram}
   \centering
   \begin{tikzpicture}[node distance=3cm]
-    \node[kyoto/box filled] (learner) {Learner};
-    \node[kyoto/box filled alert, right=of learner] (oracle) {Oracle};
+    \node[kyoto/box outline] (learner) {Learner};
+    \node[kyoto/box outline alert, right=of learner] (oracle) {Oracle};
     \draw[kyoto/arrow] (learner) -- (oracle);
   \end{tikzpicture}
 \end{frame}
@@ -99,6 +102,77 @@
 
     \draw[kyoto/arrow] (top) -- (mid);
     \draw[kyoto/arrow secondary] (mid) -- (side);
+  \end{tikzpicture}
+\end{frame}
+
+% 6. Callouts: pointer geometry stays ordinary TikZ ----------------------
+\begin{frame}{Callouts}
+  \centering
+  \begin{tikzpicture}[node distance=2.5cm]
+    \node[kyoto/box] (learner) {Learner};
+    \node[kyoto/box, right=of learner] (oracle) {Oracle};
+    \draw[kyoto/arrow] (learner) -- (oracle);
+
+    \node[
+      kyoto/callout,
+      callout absolute pointer={(learner.north)},
+      above=1.5cm of learner,
+      text width=3cm,
+    ] {Proposes a hypothesis};
+
+    \node[
+      kyoto/callout alert,
+      callout absolute pointer={(oracle.north)},
+      above=1.5cm of oracle,
+      text width=3cm,
+    ] {May return a counterexample};
+  \end{tikzpicture}
+\end{frame}
+
+% 6b. Callout styles: filled (default) vs outline -------------------------
+\begin{frame}{Callout styles: filled (default) vs outline}
+  \centering
+  \begin{tikzpicture}[node distance=2.5cm]
+    \node[kyoto/box] (t1) {Target};
+    \node[
+      kyoto/callout,
+      callout absolute pointer={(t1.south)},
+      above=1.7cm of t1,
+      text width=2.8cm,
+    ] {Filled (default)};
+
+    \node[kyoto/box, right=3.5cm of t1] (t2) {Target};
+    \node[
+      kyoto/callout outline,
+      callout absolute pointer={(t2.south)},
+      above=1.7cm of t2,
+      text width=2.8cm,
+    ] {Outline};
+  \end{tikzpicture}
+\end{frame}
+
+% 7. Standard TikZ automata + a Kyoto callout ----------------------------
+\begin{frame}{Automata (standard TikZ) with a Kyoto callout}
+  \centering
+  \begin{tikzpicture}[
+      ->,
+      >={Stealth[length=2.5mm, width=2mm]},
+      node distance=3cm,
+      initial text={},
+      every state/.style={draw=KyotoTheme, text=KyotoFg, fill=KyotoBg},
+    ]
+    \node[state, initial] (q0) {$q_0$};
+    \node[state, accepting, right=of q0] (q1) {$q_1$};
+
+    \draw (q0) edge[bend left] node[kyoto/label, above] {$a$} (q1)
+          (q1) edge[bend left] node[kyoto/label, below] {$b$} (q0);
+
+    \node[
+      kyoto/callout,
+      callout absolute pointer={(q1.north)},
+      above right=1.2cm and -0.5cm of q1,
+      text width=3cm,
+    ] {Accepting state};
   \end{tikzpicture}
 \end{frame}
 
