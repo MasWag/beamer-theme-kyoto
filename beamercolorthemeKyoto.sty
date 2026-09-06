@@ -21,14 +21,14 @@
 %% Color theme of the Kyoto presentation theme.  The Beamer color
 %% elements are mapped so that ordinary text, titles, bullets and
 %% emphasized text use the dark foreground, links use the link color,
-%% and the light background fills the slide.
+%% and white fills the slide background.
 %% ------------------------------------------------------------------------
-\ProvidesPackage{beamercolorthemeKyoto}[2026-09-02 v1.0 Kyoto color theme]
+\ProvidesPackage{beamercolorthemeKyoto}[2026-09-06 v1.1 Kyoto color theme]
 
 %% ------------------------------------------------------------------
 %% Kyoto-specific palette
 %% ------------------------------------------------------------------
-\definecolor{KyotoBg}{HTML}{EEEEEE}                 % background          #EEEEEE
+\definecolor{KyotoBg}{HTML}{FFFFFF}                 % background          #FFFFFF
 \definecolor{KyotoFg}{HTML}{222222}                 % foreground          #222222
 \definecolor{KyotoEmph}{HTML}{FF0027}               % /emph, alerted text #ff0027
 \definecolor{KyotoLink}{HTML}{2D539E}               % links               #2d539e
@@ -39,7 +39,7 @@
 \definecolor{KyotoSectionRibbonIntersect}{HTML}{666666} % (defined, unused)
 
 \mode<presentation>
-  %% Text and structure: dark foreground on the light background (the
+  %% Text and structure: dark foreground on the white background (the
   %% frame title, bullets and body all use the same dark foreground).
   \setbeamercolor{normal text}{fg=KyotoFg,bg=KyotoBg}
   \setbeamercolor{structure}{fg=KyotoFg,bg=KyotoBg}
