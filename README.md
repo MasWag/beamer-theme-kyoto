@@ -148,17 +148,18 @@ with `\kyotopostercolumnsection{...}`:
 
 The two sides are top-aligned but otherwise independent; their local
 section boundaries do not need to line up. The unstarred environment draws
-a clearly visible dark vertical separator whose height automatically follows
+a clearly visible Kyoto-navy vertical separator whose height automatically follows
 the taller column. Use `kyotopostertwocolumns*` for the same 49%/49%
-two-column geometry without that separator. A separate thin dark rule is
+two-column geometry without that separator. A separate Kyoto-navy rule is
 drawn at the physical bottom of the poster by the `KyotoPoster` outer theme,
 matching the reference poster; it is not attached to an individual column
 pair.
 
-`\kyotopostercolumnsection{...}` uses the current `\linewidth`, unlike
-the full-bleed `\kyotopostersection{...}`, and is therefore intended for
-use inside either poster column. Standard Beamer `columns` remain available
-for layouts that do not need these helpers.
+`\kyotopostercolumnsection{...}` is intended for these independent poster
+columns. Its navy background extends from the physical outer page edge to
+the center separator (left edge to center on the left, center to right edge
+on the right), matching the RV-poster layout. Standard Beamer `columns`
+remain available for layouts that do not need these helpers.
 ### Title page
 
 ```latex
