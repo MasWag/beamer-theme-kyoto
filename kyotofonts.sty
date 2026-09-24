@@ -1,0 +1,76 @@
+%% kyotofonts.sty
+%%
+%% Copyright 2026 Masaki Waga
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   <http://www.latex-project.org/lppl.txt>
+%% and version 1.3c or later is part of all distributions
+%% of LaTeX version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status ``maintained''.
+%%
+%% The Current Maintainer of this work is
+%% Masaki Waga, email mwaga@fos.kuis.kyoto-u.ac.jp.
+%%
+%% This work consists of the files listed in MANIFEST.md.
+%%
+%% ------------------------------------------------------------------------
+%% Shared font-family selection for the Kyoto Beamer themes.
+%%
+%% The presentation and poster themes intentionally choose their own
+%% element sizes, but both use the same font families and fallbacks.
+%% LuaLaTeX is the reference engine.
+%% ------------------------------------------------------------------------
+\ProvidesPackage{kyotofonts}[2026-09-24 v1.0 Shared Kyoto font families]
+
+\RequirePackage{fontspec}
+\IfFileExists{luatexja-fontspec.sty}{%
+  \RequirePackage{luatexja-fontspec}%
+}{%
+  \PackageWarning{kyotofonts}{%
+    `luatexja-fontspec' not found -- Japanese (CJK) text may not render.}%
+}
+
+%% Display font used for presentation/poster headings.
+\IfFontExistsTF{Roboto Condensed Bold}{%
+  \newfontfamily\kyoto@titlefamily{Roboto Condensed Bold}[BoldFont={Roboto Condensed Bold}]%
+}{%
+  \IfFontExistsTF{Roboto Condensed}{%
+    \newfontfamily\kyoto@titlefamily{Roboto Condensed}[BoldFont={Roboto Condensed},AutoFakeBold=1.5]%
+  }{%
+    \newcommand\kyoto@titlefamily{}%
+  }%
+}
+
+%% Latin sans-serif body text.
+\IfFontExistsTF{Noto Sans}{%
+  \setmainfont{Noto Sans}[BoldFont={Noto Sans},AutoFakeBold=1.5]%
+}{%
+  \IfFontExistsTF{Helvetica Neue}{\setmainfont{Helvetica Neue}[BoldFont={Helvetica Neue}]}{%
+    \setmainfont{Arial}[BoldFont={Arial}]}%
+}
+
+%% Japanese CJK sans-serif.
+\ifdefined\setmainjfont
+  \IfFontExistsTF{Noto Sans CJK JP}{%
+    \setmainjfont{Noto Sans CJK JP}[BoldFont={Noto Sans CJK JP},AutoFakeBold=2.6]%
+  }{%
+    \IfFontExistsTF{Hiragino Kaku Gothic ProN}{%
+      \setmainjfont{Hiragino Kaku Gothic ProN}[AutoFakeBold=2.6]%
+    }{%
+      \setmainjfont{Hiragino Kaku Gothic}[AutoFakeBold=2.6]%
+    }%
+  }
+\fi
+
+%% Monospace.
+\IfFontExistsTF{Latin Modern Mono}{%
+  \setmonofont{Latin Modern Mono}[BoldFont={Latin Modern Mono},AutoFakeBold=1.5]%
+}{%
+  \IfFontExistsTF{Menlo}{\setmonofont{Menlo}}{\setmonofont{Courier New}}%
+}
+
+\endinput
