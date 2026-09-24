@@ -17,7 +17,7 @@
 %%
 %% This work consists of the files listed in MANIFEST.md.
 %% ------------------------------------------------------------------------
-\ProvidesPackage{beamerouterthemeKyotoPoster}[2026-09-24 v1.1 Kyoto poster outer theme]
+\ProvidesPackage{beamerouterthemeKyotoPoster}[2026-09-24 v1.2 Kyoto poster outer theme]
 
 \mode<presentation>
 
@@ -38,9 +38,13 @@
 \newlength\kyotoposter@headermargin
 \kyotoposter@headermargin=.035\paperwidth
 
-%% Public helper for sizing a logo supplied through \titlegraphic.
+%% Public helpers for sizing a logo supplied through \titlegraphic.  Give
+%% both limits to \includegraphics with keepaspectratio: wide logos should
+%% not spill out of the headline merely because their height is acceptable.
 \newlength\kyotopostertitlegraphicheight
-\kyotopostertitlegraphicheight=.080\paperheight
+\kyotopostertitlegraphicheight=.065\paperheight
+\newlength\kyotopostertitlegraphicwidth
+\kyotopostertitlegraphicwidth=.14\paperwidth
 
 \setbeamercolor{poster headline}{fg=KyotoBg,bg=KyotoTheme}
 \setbeamercolor{poster section}{fg=KyotoBg,bg=KyotoTheme}
@@ -62,16 +66,16 @@
       \vfil
       \hbox to \paperwidth{%
         \hskip\kyotoposter@headermargin
-        \begin{minipage}[c]{.72\paperwidth}
+        \begin{minipage}[c]{.76\paperwidth}
           {\usebeamerfont{poster title}\color{KyotoBg}\inserttitle\par}
-          \vspace{.35em}
+          \vspace{.22em}
           {\usebeamerfont{poster author}\color{KyotoBg}\insertauthor\par}
-          \vspace{.18em}
+          \vspace{.08em}
           {\usebeamerfont{poster institute}\color{KyotoBg}\insertinstitute\par}
           {\usebeamerfont{poster date}\color{KyotoBg}\insertdate\par}
         \end{minipage}%
         \hfill
-        \begin{minipage}[c]{.16\paperwidth}
+        \begin{minipage}[c]{.14\paperwidth}
           \raggedleft
           \inserttitlegraphic
         \end{minipage}%

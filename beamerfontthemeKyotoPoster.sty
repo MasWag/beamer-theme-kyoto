@@ -17,7 +17,7 @@
 %%
 %% This work consists of the files listed in MANIFEST.md.
 %% ------------------------------------------------------------------------
-\ProvidesPackage{beamerfontthemeKyotoPoster}[2026-09-24 v1.0 Kyoto poster font theme]
+\ProvidesPackage{beamerfontthemeKyotoPoster}[2026-09-24 v1.1 Kyoto poster font theme]
 
 \RequirePackage{kyotofonts}
 
@@ -29,35 +29,40 @@
 \providecommand\VERYHuge{\Huge}
 
 \mode<presentation>
+  %% Keep the A0 hierarchy close to the poster style this theme is based on:
+  %% title ~89pt, author/affiliation/major section ~62pt, block title
+  %% ~43pt, body ~25pt at beamerposter scale=1.0.  In particular, author,
+  %% section, and block headings should not look like slightly enlarged
+  %% body text.
   \setbeamerfont{poster title}{
     family=\kyoto@titlefamily,
     size=\VeryHuge,
     series=\bfseries
   }
-  \setbeamerfont{poster author}{size=\Large,series=\bfseries}
-  \setbeamerfont{poster institute}{size=\large}
-  \setbeamerfont{poster date}{size=\normalsize}
+  \setbeamerfont{poster author}{size=\Huge,series=\bfseries}
+  \setbeamerfont{poster institute}{size=\Huge}
+  \setbeamerfont{poster date}{size=\large}
   \setbeamerfont{poster section}{
     family=\kyoto@titlefamily,
-    size=\LARGE,
+    size=\Huge,
     series=\bfseries
   }
 
   \setbeamerfont{block title}{
     family=\kyoto@titlefamily,
-    size=\Large,
+    size=\LARGE,
     series=\bfseries
   }
   \setbeamerfont{block body}{size=\normalsize}
   \setbeamerfont{block title alerted}{
     family=\kyoto@titlefamily,
-    size=\Large,
+    size=\LARGE,
     series=\bfseries
   }
   \setbeamerfont{block body alerted}{size=\normalsize}
   \setbeamerfont{block title example}{
     family=\kyoto@titlefamily,
-    size=\Large,
+    size=\LARGE,
     series=\bfseries
   }
   \setbeamerfont{block body example}{size=\normalsize}

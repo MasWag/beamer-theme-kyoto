@@ -91,7 +91,9 @@ override the theme options above after the fact:
 \date{}
 \titlegraphic{%
   \includegraphics[
-    height=\kyotopostertitlegraphicheight
+    width=\kyotopostertitlegraphicwidth,
+    height=\kyotopostertitlegraphicheight,
+    keepaspectratio
   ]{logo.pdf}%
 }
 
@@ -113,9 +115,10 @@ the title banner and there is no slide footer or frame counter.
 background reaches both physical page edges; its text remains aligned with
 the ordinary poster body margin. Use it at the top level of the poster frame,
 not inside a column.
-`\kyotopostertitlegraphicheight` is the recommended height for a logo in
-`\titlegraphic`. See `examples/poster-demo.tex` for a complete A0
-portrait example.
+`\kyotopostertitlegraphicwidth` and `\kyotopostertitlegraphicheight` are
+recommended maximum dimensions for a logo in `\titlegraphic`; pass both
+with `keepaspectratio` so a wide logo cannot overflow the header. See
+`examples/poster-demo.tex` for a complete A0 portrait example.
 
 ### Title page
 
