@@ -26,7 +26,7 @@
 %%   \usepackage[size=a0,orientation=portrait,scale=1.0]{beamerposter}
 %%   \usetheme{KyotoPoster}
 %% ------------------------------------------------------------------------
-\ProvidesPackage{beamerthemeKyotoPoster}[2026-09-24 v1.10 Kyoto poster theme]
+\ProvidesPackage{beamerthemeKyotoPoster}[2026-09-24 v1.11 Kyoto poster theme]
 
 \RequirePackage{etoolbox}
 
@@ -87,9 +87,19 @@
 \newlength\kyotoposter@columnsectionheight
 \newlength\kyotoposter@columnsectionshift
 \newlength\kyotoposter@columnsectionleftpad
+\newif\ifkyotoposter@firstcolumnsection
 
 \newcommand\kyotopostercolumnsection[1]{%
-  \par\medskip
+  \par
+  \ifkyotoposter@firstcolumnsection
+    %% The parent two-column layout already follows whatever material
+    %% precedes it.  Suppress this first local \medskip so the center
+    %% separator starts exactly at the first ribbon rather than protruding
+    %% into the whitespace above it.
+    \kyotoposter@firstcolumnsectionfalse
+  \else
+    \medskip
+  \fi
   \begingroup
     \usebeamerfont{poster section}%
     \setlength\kyotoposter@columnsectionheight{1.35\baselineskip}%
@@ -172,6 +182,7 @@
     \begin{minipage}[t]{\kyotoposter@columnwidth}%
       \vspace*{0pt}%
       \def\kyotoposter@columnside{#2}%
+      \kyotoposter@firstcolumnsectiontrue
       #3%
     \end{minipage}%
   }%
