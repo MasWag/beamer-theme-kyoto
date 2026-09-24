@@ -17,7 +17,7 @@
 %%
 %% This work consists of the files listed in MANIFEST.md.
 %% ------------------------------------------------------------------------
-\ProvidesPackage{beamerinnerthemeKyotoPoster}[2026-09-24 v1.1 Kyoto poster inner theme]
+\ProvidesPackage{beamerinnerthemeKyotoPoster}[2026-09-24 v1.2 Kyoto poster inner theme]
 
 %% Reuse the presentation theme's block/list visual language, then override
 %% fixed-point spacing that is too small on a poster.
@@ -39,10 +39,10 @@
     \setlength\parsep{.14em plus .04em}%
   }
 
-  %% Beamer's rounded-block implementation uses fixed 4bp-ish title
-  %% insets, which are visually too tight once beamerposter scales the
-  %% text.  Keep the same rounded box machinery and colors, but wrap each
-  %% title in font-relative horizontal/vertical padding.
+  %% Beamer's rounded-block implementation uses fixed 4bp-ish insets, which
+  %% are visually too tight once beamerposter scales the text.  Keep the same
+  %% rounded box machinery and colors, but add font-relative padding to both
+  %% the title and (especially) the main body.
   \newcommand\kyotoposter@blocktitle[2]{%
     \hspace*{.50em}%
     \parbox{\dimexpr\linewidth-1.00em\relax}{%
@@ -52,14 +52,26 @@
     }%
   }
 
+  \newcommand\kyotoposter@blockbodybegin{%
+    \hspace*{.60em}%
+    \begin{minipage}{\dimexpr\linewidth-1.20em\relax}%
+      \vspace*{.35em}%
+      \raggedright
+  }
+  \newcommand\kyotoposter@blockbodyend{%
+      \par\vspace*{.42em}%
+    \end{minipage}%
+  }
+
   \setbeamertemplate{block begin}{%
     \par\vskip\medskipamount%
     \begin{beamerboxesrounded}[upper=block title,lower=block body,shadow=false]%
       {\kyotoposter@blocktitle{block title}{\insertblocktitle}}%
-      \raggedright%
       \usebeamerfont{block body}%
+      \kyotoposter@blockbodybegin
   }
   \setbeamertemplate{block end}{%
+      \kyotoposter@blockbodyend
     \end{beamerboxesrounded}\vskip\smallskipamount%
   }
 
@@ -67,10 +79,11 @@
     \par\vskip\medskipamount%
     \begin{beamerboxesrounded}[upper=block title alerted,lower=block body alerted,shadow=false]%
       {\kyotoposter@blocktitle{block title alerted}{\insertblocktitle}}%
-      \raggedright%
       \usebeamerfont{block body alerted}%
+      \kyotoposter@blockbodybegin
   }
   \setbeamertemplate{block alerted end}{%
+      \kyotoposter@blockbodyend
     \end{beamerboxesrounded}\vskip\smallskipamount%
   }
 
@@ -78,10 +91,11 @@
     \par\vskip\medskipamount%
     \begin{beamerboxesrounded}[upper=block title example,lower=block body example,shadow=false]%
       {\kyotoposter@blocktitle{block title example}{\insertblocktitle}}%
-      \raggedright%
       \usebeamerfont{block body example}%
+      \kyotoposter@blockbodybegin
   }
   \setbeamertemplate{block example end}{%
+      \kyotoposter@blockbodyend
     \end{beamerboxesrounded}\vskip\smallskipamount%
   }
 \mode<all>

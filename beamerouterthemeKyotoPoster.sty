@@ -17,13 +17,13 @@
 %%
 %% This work consists of the files listed in MANIFEST.md.
 %% ------------------------------------------------------------------------
-\ProvidesPackage{beamerouterthemeKyotoPoster}[2026-09-24 v1.2 Kyoto poster outer theme]
+\ProvidesPackage{beamerouterthemeKyotoPoster}[2026-09-24 v1.3 Kyoto poster outer theme]
 
 \mode<presentation>
 
 %% Poster geometry: page-relative margins so the same theme works for A0,
 %% A1, portrait, and landscape layouts.  Keep the margin public because the
-%% full-bleed section ribbon must shift itself over exactly this distance.
+%% full-bleed section ribbon uses the same inset for its text.
 \newlength\kyotopostercontentmargin
 \kyotopostercontentmargin=.025\paperwidth
 
@@ -32,8 +32,12 @@
   text margin right=\kyotopostercontentmargin
 }
 
-\newlength\kyotoposter@headerheight
-\kyotoposter@headerheight=.125\paperheight
+%% The headline height is content-driven rather than a fixed fraction of the
+%% page.  This keeps short titles compact (as in the reference poster) while
+%% still allowing a long title to wrap naturally.  Only this explicit padding
+%% is added above and below the title/author/institute group.
+\newlength\kyotoposter@headerpadding
+\kyotoposter@headerpadding=.010\paperheight
 
 \newlength\kyotoposter@headermargin
 \kyotoposter@headermargin=.035\paperwidth
@@ -57,32 +61,26 @@
 %% is no separate top strip and no footer/page number.
 \setbeamertemplate{headline}{%
   \leavevmode
-  \begin{beamercolorbox}[
-    wd=\paperwidth,
-    ht=\kyotoposter@headerheight,
-    dp=0ex
-  ]{poster headline}%
-    \vbox to \kyotoposter@headerheight{%
-      \vfil
-      \hbox to \paperwidth{%
-        \hskip\kyotoposter@headermargin
-        \begin{minipage}[c]{.76\paperwidth}
-          {\usebeamerfont{poster title}\color{KyotoBg}\inserttitle\par}
-          \vspace{.22em}
-          {\usebeamerfont{poster author}\color{KyotoBg}\insertauthor\par}
-          \vspace{.08em}
-          {\usebeamerfont{poster institute}\color{KyotoBg}\insertinstitute\par}
-          {\usebeamerfont{poster date}\color{KyotoBg}\insertdate\par}
-        \end{minipage}%
-        \hfill
-        \begin{minipage}[c]{.14\paperwidth}
-          \raggedleft
-          \inserttitlegraphic
-        \end{minipage}%
-        \hskip\kyotoposter@headermargin
-      }%
-      \vfil
+  \begin{beamercolorbox}[wd=\paperwidth,sep=0pt]{poster headline}%
+    \vskip\kyotoposter@headerpadding
+    \hbox to \paperwidth{%
+      \hskip\kyotoposter@headermargin
+      \begin{minipage}[c]{.76\paperwidth}
+        {\usebeamerfont{poster title}\color{KyotoBg}\inserttitle\par}
+        \vspace{.22em}
+        {\usebeamerfont{poster author}\color{KyotoBg}\insertauthor\par}
+        \vspace{.08em}
+        {\usebeamerfont{poster institute}\color{KyotoBg}\insertinstitute\par}
+        {\usebeamerfont{poster date}\color{KyotoBg}\insertdate\par}
+      \end{minipage}%
+      \hfill
+      \begin{minipage}[c]{.14\paperwidth}
+        \raggedleft
+        \inserttitlegraphic
+      \end{minipage}%
+      \hskip\kyotoposter@headermargin
     }%
+    \vskip\kyotoposter@headerpadding
   \end{beamercolorbox}%
 }
 
