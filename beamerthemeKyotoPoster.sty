@@ -26,7 +26,7 @@
 %%   \usepackage[size=a0,orientation=portrait,scale=1.0]{beamerposter}
 %%   \usetheme{KyotoPoster}
 %% ------------------------------------------------------------------------
-\ProvidesPackage{beamerthemeKyotoPoster}[2026-09-24 v1.5 Kyoto poster theme]
+\ProvidesPackage{beamerthemeKyotoPoster}[2026-09-24 v1.6 Kyoto poster theme]
 
 \RequirePackage{etoolbox}
 
@@ -149,15 +149,11 @@
       \usebox\kyotoposter@leftcolumnbox
       \hfil
       \ifkyotoposter@columnseparator
-        {\color{KyotoFg}\vrule width .06em}%
+        {\usebeamerfont{normal text}\color{KyotoFg}\vrule width .10em}%
       \fi
       \hfil
       \usebox\kyotoposter@rightcolumnbox
     }%
-    \ifkyotoposter@columnseparator
-      \nointerlineskip
-      {\color{KyotoFg}\hrule height .06em width \linewidth}%
-    \fi
   }%
   \par\endgroup
 }

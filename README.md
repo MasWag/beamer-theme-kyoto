@@ -148,10 +148,12 @@ with `\kyotopostercolumnsection{...}`:
 
 The two sides are top-aligned but otherwise independent; their local
 section boundaries do not need to line up. The unstarred environment draws
-a dark vertical separator whose height automatically follows the taller
-column, plus a matching thin horizontal rule along the bottom, as in the RV
-poster. Use `kyotopostertwocolumns*` for the same 49%/49% two-column
-geometry without either rule.
+a clearly visible dark vertical separator whose height automatically follows
+the taller column. Use `kyotopostertwocolumns*` for the same 49%/49%
+two-column geometry without that separator. A separate thin dark rule is
+drawn at the physical bottom of the poster by the `KyotoPoster` outer theme,
+matching the reference poster; it is not attached to an individual column
+pair.
 
 `\kyotopostercolumnsection{...}` uses the current `\linewidth`, unlike
 the full-bleed `\kyotopostersection{...}`, and is therefore intended for

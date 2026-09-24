@@ -17,7 +17,7 @@
 %%
 %% This work consists of the files listed in MANIFEST.md.
 %% ------------------------------------------------------------------------
-\ProvidesPackage{beamerouterthemeKyotoPoster}[2026-09-24 v1.3 Kyoto poster outer theme]
+\ProvidesPackage{beamerouterthemeKyotoPoster}[2026-09-24 v1.4 Kyoto poster outer theme]
 
 \mode<presentation>
 
@@ -84,7 +84,17 @@
   \end{beamercolorbox}%
 }
 
-\setbeamertemplate{footline}{}
+%% A thin dark rule along the physical bottom edge, matching the reference
+%% poster.  It is global poster furniture rather than part of any particular
+%% content block or two-column environment.
+\setbeamertemplate{footline}{%
+  \leavevmode
+  \hbox{%
+    \usebeamerfont{normal text}%
+    \color{KyotoFg}%
+    \vrule width\paperwidth height.05em depth0pt%
+  }%
+}
 \setbeamertemplate{navigation symbols}{}
 
 \mode<all>
