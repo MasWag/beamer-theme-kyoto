@@ -26,7 +26,7 @@
 %%   \usepackage[size=a0,orientation=portrait,scale=1.0]{beamerposter}
 %%   \usetheme{KyotoPoster}
 %% ------------------------------------------------------------------------
-\ProvidesPackage{beamerthemeKyotoPoster}[2026-09-24 v1.4 Kyoto poster theme]
+\ProvidesPackage{beamerthemeKyotoPoster}[2026-09-24 v1.5 Kyoto poster theme]
 
 \RequirePackage{etoolbox}
 
@@ -99,12 +99,17 @@
   \smallskip
 }
 
-%% Independent two-column layout.  Each side is first typeset into its own
-%% top-aligned minipage; the two saved boxes are then placed side by side.
-%% With the unstarred environment, an ordinary TeX \vrule between the boxes
-%% gets "running" height/depth from the enclosing \hbox, so it automatically
-%% spans whichever column is taller.  The starred environment uses the same
-%% geometry without the separator.
+%% Independent two-column layout.  The left/right child environments capture
+%% their bodies as token lists; the parent typesets those token lists into
+%% top-aligned minipages only after both have been collected.  This avoids
+%% the savebox/lrbox grouping problem that can discard the collected content.
+%%
+%% In the unstarred environment, a running \vrule separates the columns and
+%% a matching thin rule closes the pair at the bottom, reproducing the
+%% T-shaped divider used by the RV poster.  The starred environment keeps the
+%% same 49%/49% geometry but omits both rules.
+\newtoks\kyotoposter@leftcolumntoks
+\newtoks\kyotoposter@rightcolumntoks
 \newsavebox\kyotoposter@leftcolumnbox
 \newsavebox\kyotoposter@rightcolumnbox
 \newlength\kyotoposter@columnwidth
@@ -118,20 +123,41 @@
     \kyotoposter@columnseparatorfalse
   }%
   \setlength\kyotoposter@columnwidth{.49\linewidth}%
-  \setbox\kyotoposter@leftcolumnbox=\hbox{}%
-  \setbox\kyotoposter@rightcolumnbox=\hbox{}%
+  \global\kyotoposter@leftcolumntoks={}%
+  \global\kyotoposter@rightcolumntoks={}%
+}
+
+\newcommand\kyotoposter@typesetcolumn[2]{%
+  \sbox#1{%
+    \begin{minipage}[t]{\kyotoposter@columnwidth}%
+      \vspace*{0pt}%
+      #2%
+    \end{minipage}%
+  }%
 }
 
 \newcommand\kyotoposter@twocolumnsend{%
+  \kyotoposter@typesetcolumn{\kyotoposter@leftcolumnbox}{%
+    \the\kyotoposter@leftcolumntoks
+  }%
+  \kyotoposter@typesetcolumn{\kyotoposter@rightcolumnbox}{%
+    \the\kyotoposter@rightcolumntoks
+  }%
   \par\noindent
-  \hbox to \linewidth{%
-    \usebox\kyotoposter@leftcolumnbox
-    \hfil
+  \vbox{%
+    \hbox to \linewidth{%
+      \usebox\kyotoposter@leftcolumnbox
+      \hfil
+      \ifkyotoposter@columnseparator
+        {\color{KyotoFg}\vrule width .06em}%
+      \fi
+      \hfil
+      \usebox\kyotoposter@rightcolumnbox
+    }%
     \ifkyotoposter@columnseparator
-      {\color{KyotoFg}\vrule width .06em}%
+      \nointerlineskip
+      {\color{KyotoFg}\hrule height .06em width \linewidth}%
     \fi
-    \hfil
-    \usebox\kyotoposter@rightcolumnbox
   }%
   \par\endgroup
 }
@@ -148,25 +174,13 @@
   \kyotoposter@twocolumnsend
 }
 
-\newenvironment{kyotoposterleftcolumn}{%
-  \begin{lrbox}{\kyotoposter@leftcolumnbox}%
-    \begin{minipage}[t]{\kyotoposter@columnwidth}%
-      \vspace*{0pt}\ignorespaces
-}{%
-    \end{minipage}%
-  \end{lrbox}%
-  \ignorespacesafterend
-}
+\NewDocumentEnvironment{kyotoposterleftcolumn}{+b}{%
+  \global\kyotoposter@leftcolumntoks={#1}%
+}{}
 
-\newenvironment{kyotoposterrightcolumn}{%
-  \begin{lrbox}{\kyotoposter@rightcolumnbox}%
-    \begin{minipage}[t]{\kyotoposter@columnwidth}%
-      \vspace*{0pt}\ignorespaces
-}{%
-    \end{minipage}%
-  \end{lrbox}%
-  \ignorespacesafterend
-}
+\NewDocumentEnvironment{kyotoposterrightcolumn}{+b}{%
+  \global\kyotoposter@rightcolumntoks={#1}%
+}{}
 
 \AtBeginDocument{%
   \hypersetup{%
