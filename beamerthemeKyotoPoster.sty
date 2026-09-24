@@ -26,7 +26,7 @@
 %%   \usepackage[size=a0,orientation=portrait,scale=1.0]{beamerposter}
 %%   \usetheme{KyotoPoster}
 %% ------------------------------------------------------------------------
-\ProvidesPackage{beamerthemeKyotoPoster}[2026-09-24 v1.9 Kyoto poster theme]
+\ProvidesPackage{beamerthemeKyotoPoster}[2026-09-24 v1.10 Kyoto poster theme]
 
 \RequirePackage{etoolbox}
 
@@ -97,13 +97,13 @@
     \setlength\kyotoposter@columnsectionshift{0pt}%
     \setlength\kyotoposter@columnsectionleftpad{.45em}%
 
-    \ifstrequal{\kyotoposter@columnside}{left}{%
+    \ifdefstring{\kyotoposter@columnside}{left}{%
       \setlength\kyotoposter@columnsectionwidth{.5\paperwidth}%
       \setlength\kyotoposter@columnsectionshift{-\kyotopostercontentmargin}%
       %% Align the heading with ordinary left-column body text.
       \setlength\kyotoposter@columnsectionleftpad{\kyotopostercontentmargin}%
     }{%
-      \ifstrequal{\kyotoposter@columnside}{right}{%
+      \ifdefstring{\kyotoposter@columnside}{right}{%
         \setlength\kyotoposter@columnsectionwidth{.5\paperwidth}%
         \setlength\kyotoposter@columnsectionshift{-\kyotoposter@columncenteroverhang}%
         %% Start just to the right of the center divider.
@@ -139,10 +139,10 @@
 %% top-aligned minipages only after both have been collected.  This avoids
 %% the savebox/lrbox grouping problem that can discard the collected content.
 %%
-%% In the unstarred environment, a running \vrule separates the columns and
-%% a matching thin rule closes the pair at the bottom, reproducing the
-%% T-shaped divider used by the RV poster.  The starred environment keeps the
-%% same 49%/49% geometry but omits both rules.
+%% In the unstarred environment, a running \vrule separates the columns.
+%% The page-wide bottom rule is supplied by the poster outer theme.  The
+%% starred environment keeps the same 49%/49% geometry without the vertical
+%% separator.
 \newtoks\kyotoposter@leftcolumntoks
 \newtoks\kyotoposter@rightcolumntoks
 \newsavebox\kyotoposter@leftcolumnbox
