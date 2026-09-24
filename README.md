@@ -120,6 +120,42 @@ recommended maximum dimensions for a logo in `\titlegraphic`; pass both
 with `keepaspectratio` so a wide logo cannot overflow the header. See
 `examples/poster-demo.tex` for a complete A0 portrait example.
 
+### Independent two-column poster sections
+
+For an RV-style layout in which the left and right halves progress through
+sections independently, use the poster two-column environments together
+with `\kyotopostercolumnsection{...}`:
+
+```latex
+\begin{kyotopostertwocolumns}
+  \begin{kyotoposterleftcolumn}
+    \kyotopostercolumnsection{Left Section A}
+    ...
+
+    \kyotopostercolumnsection{Left Section B}
+    ...
+  \end{kyotoposterleftcolumn}
+
+  \begin{kyotoposterrightcolumn}
+    \kyotopostercolumnsection{Right Section A}
+    ...
+
+    \kyotopostercolumnsection{Right Section B}
+    ...
+  \end{kyotoposterrightcolumn}
+\end{kyotopostertwocolumns}
+```
+
+The two sides are top-aligned but otherwise independent; their local
+section boundaries do not need to line up. The unstarred environment draws
+a dark vertical separator whose height automatically follows the taller
+column. Use `kyotopostertwocolumns*` for the same 49%/49% two-column
+geometry without the separator.
+
+`\kyotopostercolumnsection{...}` uses the current `\linewidth`, unlike
+the full-bleed `\kyotopostersection{...}`, and is therefore intended for
+use inside either poster column. Standard Beamer `columns` remain available
+for layouts that do not need these helpers.
 ### Title page
 
 ```latex

@@ -37,8 +37,8 @@
 
   \kyotopostersection{Overview}
 
-  \begin{columns}[t,totalwidth=\textwidth]
-    \begin{column}{.48\textwidth}
+  \begin{kyotopostertwocolumns*}
+    \begin{kyotoposterleftcolumn}
       \begin{block}{Shared visual language}
         KyotoPoster reuses the presentation theme's colors, font
         families, rounded blocks, emphasis convention, and optional
@@ -51,9 +51,9 @@
           \item Relative list spacing that scales with poster text
         \end{itemize}
       \end{block}
-    \end{column}
+    \end{kyotoposterleftcolumn}
 
-    \begin{column}{.48\textwidth}
+    \begin{kyotoposterrightcolumn}
       \begin{alertblock}{Poster-specific layout}
         The poster has no slide footer, frame counter, or slide title
         strip.  The headline itself carries the poster metadata and logo.
@@ -63,13 +63,13 @@
         京都大学のポスターでも、発表スライドと同じ視覚言語を
         再利用できます。
       \end{exampleblock}
-    \end{column}
-  \end{columns}
+    \end{kyotoposterrightcolumn}
+  \end{kyotopostertwocolumns*}
 
   \kyotopostersection{Reusable Components}
 
-  \begin{columns}[t,totalwidth=\textwidth]
-    \begin{column}{.48\textwidth}
+  \begin{kyotopostertwocolumns*}
+    \begin{kyotoposterleftcolumn}
       \begin{block}{Equations and text}
         Ordinary Beamer content remains available:
         \[
@@ -78,9 +78,9 @@
         The poster theme deliberately leaves the scientific layout to the
         document instead of introducing poster-specific column abstractions.
       \end{block}
-    \end{column}
+    \end{kyotoposterleftcolumn}
 
-    \begin{column}{.48\textwidth}
+    \begin{kyotoposterrightcolumn}
       \begin{block}{Kyoto TikZ styles}
         \centering
         \begin{tikzpicture}[node distance=5cm]
@@ -90,8 +90,46 @@
             node[kyoto/label, midway, above] {shortcut};
         \end{tikzpicture}
       \end{block}
-    \end{column}
-  \end{columns}
+    \end{kyotoposterrightcolumn}
+  \end{kyotopostertwocolumns*}
+
+
+  \kyotopostersection{Independent Two-Column Layout}
+
+  \begin{kyotopostertwocolumns}
+    \begin{kyotoposterleftcolumn}
+      \kyotopostercolumnsection{Left Stream}
+
+      \begin{block}{First left topic}
+        Each side may advance through its own section sequence.  The
+        separator automatically follows the taller side.
+      \end{block}
+
+      \kyotopostercolumnsection{Later Left Section}
+
+      \begin{block}{Second left topic}
+        Column-local section ribbons use the same typography and palette as
+        the full-width ribbon.
+      \end{block}
+    \end{kyotoposterleftcolumn}
+
+    \begin{kyotoposterrightcolumn}
+      \kyotopostercolumnsection{Right Stream}
+
+      \begin{block}{Independent content}
+        The right side does not need to align its section boundaries with
+        the left side.
+      \end{block}
+
+      \vspace{1.3em}
+      \kyotopostercolumnsection{Later Right Section}
+
+      \begin{block}{Another topic}
+        Use \texttt{kyotopostertwocolumns*} when the same two-column
+        geometry is desired without a vertical separator.
+      \end{block}
+    \end{kyotoposterrightcolumn}
+  \end{kyotopostertwocolumns}
 \end{frame}
 
 \end{document}

@@ -26,7 +26,7 @@
 %%   \usepackage[size=a0,orientation=portrait,scale=1.0]{beamerposter}
 %%   \usetheme{KyotoPoster}
 %% ------------------------------------------------------------------------
-\ProvidesPackage{beamerthemeKyotoPoster}[2026-09-24 v1.3 Kyoto poster theme]
+\ProvidesPackage{beamerthemeKyotoPoster}[2026-09-24 v1.4 Kyoto poster theme]
 
 \RequirePackage{etoolbox}
 
@@ -71,6 +71,101 @@
     \end{beamercolorbox}%
   \endgroup
   \smallskip
+}
+
+
+%% A column-local section ribbon for layouts in which the left and right
+%% halves advance through sections independently.  Unlike
+%% \kyotopostersection, this ribbon is intentionally limited to the current
+%% \linewidth.
+\newcommand\kyotopostercolumnsection[1]{%
+  \par\medskip
+  \begingroup
+    \usebeamerfont{poster section}%
+    \dimen@=1.35\baselineskip
+    \begin{beamercolorbox}[wd=\linewidth,sep=0pt]{poster section}%
+      \vbox to \dimen@{%
+        \vfil
+        \hbox to \linewidth{%
+          \hskip.45em
+          \strut #1%
+          \hfil
+          \hskip.45em
+        }%
+        \vfil
+      }%
+    \end{beamercolorbox}%
+  \endgroup
+  \smallskip
+}
+
+%% Independent two-column layout.  Each side is first typeset into its own
+%% top-aligned minipage; the two saved boxes are then placed side by side.
+%% With the unstarred environment, an ordinary TeX \vrule between the boxes
+%% gets "running" height/depth from the enclosing \hbox, so it automatically
+%% spans whichever column is taller.  The starred environment uses the same
+%% geometry without the separator.
+\newsavebox\kyotoposter@leftcolumnbox
+\newsavebox\kyotoposter@rightcolumnbox
+\newlength\kyotoposter@columnwidth
+\newif\ifkyotoposter@columnseparator
+
+\newcommand\kyotoposter@twocolumnsbegin[1]{%
+  \par\begingroup
+  \ifstrequal{#1}{true}{%
+    \kyotoposter@columnseparatortrue
+  }{%
+    \kyotoposter@columnseparatorfalse
+  }%
+  \setlength\kyotoposter@columnwidth{.49\linewidth}%
+  \setbox\kyotoposter@leftcolumnbox=\hbox{}%
+  \setbox\kyotoposter@rightcolumnbox=\hbox{}%
+}
+
+\newcommand\kyotoposter@twocolumnsend{%
+  \par\noindent
+  \hbox to \linewidth{%
+    \usebox\kyotoposter@leftcolumnbox
+    \hfil
+    \ifkyotoposter@columnseparator
+      {\color{KyotoFg}\vrule width .06em}%
+    \fi
+    \hfil
+    \usebox\kyotoposter@rightcolumnbox
+  }%
+  \par\endgroup
+}
+
+\newenvironment{kyotopostertwocolumns}{%
+  \kyotoposter@twocolumnsbegin{true}%
+}{%
+  \kyotoposter@twocolumnsend
+}
+
+\newenvironment{kyotopostertwocolumns*}{%
+  \kyotoposter@twocolumnsbegin{false}%
+}{%
+  \kyotoposter@twocolumnsend
+}
+
+\newenvironment{kyotoposterleftcolumn}{%
+  \begin{lrbox}{\kyotoposter@leftcolumnbox}%
+    \begin{minipage}[t]{\kyotoposter@columnwidth}%
+      \vspace*{0pt}\ignorespaces
+}{%
+    \end{minipage}%
+  \end{lrbox}%
+  \ignorespacesafterend
+}
+
+\newenvironment{kyotoposterrightcolumn}{%
+  \begin{lrbox}{\kyotoposter@rightcolumnbox}%
+    \begin{minipage}[t]{\kyotoposter@columnwidth}%
+      \vspace*{0pt}\ignorespaces
+}{%
+    \end{minipage}%
+  \end{lrbox}%
+  \ignorespacesafterend
 }
 
 \AtBeginDocument{%
