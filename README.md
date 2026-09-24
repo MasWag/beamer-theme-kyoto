@@ -2,7 +2,8 @@
 
 A [Beamer](https://ctan.org/pkg/beamer) theme with a light background, a
 navy top/bottom band, bold centered titles, and support for mixed
-Japanese/English text. It is a Beamer port / counterpart of the
+Japanese/English text. The repository also provides a matching
+`KyotoPoster` theme for posters built with `beamerposter`. It is a Beamer port / counterpart of the
 [SLyDIFi Kyoto theme](https://github.com/MasWag/slydifi-kyoto-demo)
 (a theme for the [SLyDIFi](https://github.com/na-o-ys/slydifi) class),
 reimplemented independently for Beamer.
@@ -12,6 +13,8 @@ reimplemented independently for Beamer.
 - **LuaLaTeX** is the reference engine (not pdfLaTeX/XeLaTeX).
 - `fontspec` and `luatexja-fontspec` (for Japanese text), `kvoptions`,
   `etoolbox` -- all commonly available in a standard TeX Live install.
+- Poster use additionally requires `beamerposter` (normally provided by a
+  standard/full TeX Live installation).
 - Fonts, each with a fallback if not installed (see
   `beamerfontthemeKyoto.sty`):
   - **Noto Sans** -- Latin body/UI text (falls back to Helvetica
@@ -41,9 +44,9 @@ This theme is not published on CTAN; use it by cloning this repository
 ```
 
 Put `beamerthemeKyoto.sty`, `beamercolorthemeKyoto.sty`,
-`beamerfontthemeKyoto.sty`, `beamerinnerthemeKyoto.sty` and
-`beamerouterthemeKyoto.sty` (all in the repository root) somewhere LaTeX
-can find them -- either alongside your `.tex` file, on `TEXINPUTS`, or
+`beamerfontthemeKyoto.sty`, `beamerinnerthemeKyoto.sty`,
+`beamerouterthemeKyoto.sty`, and `kyotofonts.sty` (all in the repository
+root) somewhere LaTeX can find them -- either alongside your `.tex` file, on `TEXINPUTS`, or
 installed into your local TEXMF tree. There is no packaged/CTAN
 installation.
 
@@ -68,6 +71,96 @@ override the theme options above after the fact:
 - `\kyotototalpagenum{true|false}` -- toggle the `frame/total` footer.
 - `\kyotofooter{<text>}` -- set the right-hand footer text.
 
+
+## Poster usage
+
+```latex
+\documentclass[final]{beamer}
+
+\usepackage[
+  size=a0,
+  orientation=portrait,
+  scale=1.0
+]{beamerposter}
+
+\usetheme{KyotoPoster}
+
+\title{My Poster}
+\author{My Name}
+\institute{My Institute}
+\date{}
+\titlegraphic{%
+  \includegraphics[
+    width=\kyotopostertitlegraphicwidth,
+    height=\kyotopostertitlegraphicheight,
+    keepaspectratio
+  ]{logo.pdf}%
+}
+
+\begin{document}
+\begin{frame}[t]
+  \kyotopostersection{Motivation}
+  % poster content, columns, blocks, figures, ...
+\end{frame}
+\end{document}
+```
+
+Load `beamerposter` before `\usetheme{KyotoPoster}` so that the document
+can choose its own paper size, orientation, and scale. The poster theme
+reuses the Kyoto palette, font families, block styling, emphasis, and TikZ
+library, but has poster-specific typography and geometry: the headline is
+the title banner and there is no slide footer or frame counter.
+
+`\kyotopostersection{...}` draws a full-bleed navy section ribbon whose
+background reaches both physical page edges; its text remains aligned with
+the ordinary poster body margin. Use it at the top level of the poster frame,
+not inside a column.
+`\kyotopostertitlegraphicwidth` and `\kyotopostertitlegraphicheight` are
+recommended maximum dimensions for a logo in `\titlegraphic`; pass both
+with `keepaspectratio` so a wide logo cannot overflow the header. See
+`examples/poster-demo.tex` for a complete A0 portrait example.
+
+### Independent two-column poster sections
+
+For an RV-style layout in which the left and right halves progress through
+sections independently, use the poster two-column environments together
+with `\kyotopostercolumnsection{...}`:
+
+```latex
+\begin{kyotopostertwocolumns}
+  \begin{kyotoposterleftcolumn}
+    \kyotopostercolumnsection{Left Section A}
+    ...
+
+    \kyotopostercolumnsection{Left Section B}
+    ...
+  \end{kyotoposterleftcolumn}
+
+  \begin{kyotoposterrightcolumn}
+    \kyotopostercolumnsection{Right Section A}
+    ...
+
+    \kyotopostercolumnsection{Right Section B}
+    ...
+  \end{kyotoposterrightcolumn}
+\end{kyotopostertwocolumns}
+```
+
+The two sides are top-aligned but otherwise independent; their local
+section boundaries do not need to line up. The unstarred environment draws
+a clearly visible Kyoto-navy vertical separator whose height automatically follows
+the taller column. Use `kyotopostertwocolumns*` for the same 49%/49%
+two-column geometry without that separator. A separate Kyoto-navy rule is
+drawn at the physical bottom of the poster by the `KyotoPoster` outer theme,
+matching the reference poster; it is not attached to an individual column
+pair.
+
+`\kyotopostercolumnsection{...}` is intended for these independent poster
+columns. Its navy background extends from the physical outer page edge to
+the center separator (left edge to center on the left, center to right edge
+on the right), matching the RV-poster layout. Column-section headings are
+left-aligned by default rather than centered. Standard Beamer `columns`
+remain available for layouts that do not need these helpers.
 ### Title page
 
 ```latex
@@ -117,8 +210,8 @@ Japanese/English text.
 make
 ```
 
-from the repository root builds `examples/demo.pdf` and
-`examples/tikz-demo.pdf` with `latexmk` and LuaLaTeX
+from the repository root builds `examples/demo.pdf`,
+`examples/poster-demo.pdf`, and the TikZ examples with `latexmk` and LuaLaTeX
 (`examples/latexmkrc` points `TEXINPUTS` at the theme files in the
 repository root, so nothing needs installing into TEXMF first).
 Equivalently, from the `examples/` directory: `latexmk demo.tex` or

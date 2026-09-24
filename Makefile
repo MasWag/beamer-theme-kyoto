@@ -1,5 +1,5 @@
-# Build the Kyoto Beamer theme examples (examples/demo.pdf,
-# examples/tikz-demo.pdf and examples/tikz-standalone.pdf) with
+# Build the Kyoto Beamer theme examples (presentation, poster,
+# TikZ demo, and standalone TikZ) with
 # LuaLaTeX via latexmk, without installing the theme into TEXMF first.
 #
 # Usage:
@@ -9,7 +9,7 @@
 .PHONY: all clean
 
 all:
-	cd examples && latexmk demo.tex tikz-demo.tex tikz-standalone.tex
+	cd examples && latexmk demo.tex poster-demo.tex tikz-demo.tex tikz-standalone.tex
 
 clean:
-	cd examples && latexmk -C demo.tex tikz-demo.tex tikz-standalone.tex
+	cd examples && latexmk -C demo.tex poster-demo.tex tikz-demo.tex tikz-standalone.tex

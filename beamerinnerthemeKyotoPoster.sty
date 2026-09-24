@@ -1,0 +1,103 @@
+%% beamerinnerthemeKyotoPoster.sty
+%%
+%% Copyright 2026 Masaki Waga
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   <http://www.latex-project.org/lppl.txt>
+%% and version 1.3c or later is part of all distributions
+%% of LaTeX version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status ``maintained''.
+%%
+%% The Current Maintainer of this work is
+%% Masaki Waga, email mwaga@fos.kuis.kyoto-u.ac.jp.
+%%
+%% This work consists of the files listed in MANIFEST.md.
+%% ------------------------------------------------------------------------
+\ProvidesPackage{beamerinnerthemeKyotoPoster}[2026-09-24 v1.2 Kyoto poster inner theme]
+
+%% Reuse the presentation theme's block/list visual language, then override
+%% fixed-point spacing that is too small on a poster.
+\RequirePackage{beamerinnerthemeKyoto}
+
+\mode<presentation>
+  %% Font-relative list spacing suitable for poster text.
+  \g@addto@macro\@listi{%
+    \setlength\itemsep{.55em plus .12em minus .08em}%
+    \setlength\parsep{.20em plus .05em}%
+  }
+  \let\@listI\@listi
+  \g@addto@macro\@listii{%
+    \setlength\itemsep{.45em plus .10em minus .06em}%
+    \setlength\parsep{.16em plus .04em}%
+  }
+  \g@addto@macro\@listiii{%
+    \setlength\itemsep{.40em plus .08em minus .05em}%
+    \setlength\parsep{.14em plus .04em}%
+  }
+
+  %% Beamer's rounded-block implementation uses fixed 4bp-ish insets, which
+  %% are visually too tight once beamerposter scales the text.  Keep the same
+  %% rounded box machinery and colors, but add font-relative padding to both
+  %% the title and (especially) the main body.
+  \newcommand\kyotoposter@blocktitle[2]{%
+    \hspace*{.50em}%
+    \parbox{\dimexpr\linewidth-1.00em\relax}{%
+      \vspace*{.30em}%
+      \raggedright\usebeamerfont*{#1}#2\par
+      \vspace*{.30em}%
+    }%
+  }
+
+  \newcommand\kyotoposter@blockbodybegin{%
+    \hspace*{.60em}%
+    \begin{minipage}{\dimexpr\linewidth-1.20em\relax}%
+      \vspace*{.35em}%
+      \raggedright
+  }
+  \newcommand\kyotoposter@blockbodyend{%
+      \par\vspace*{.42em}%
+    \end{minipage}%
+  }
+
+  \setbeamertemplate{block begin}{%
+    \par\vskip\medskipamount%
+    \begin{beamerboxesrounded}[upper=block title,lower=block body,shadow=false]%
+      {\kyotoposter@blocktitle{block title}{\insertblocktitle}}%
+      \usebeamerfont{block body}%
+      \kyotoposter@blockbodybegin
+  }
+  \setbeamertemplate{block end}{%
+      \kyotoposter@blockbodyend
+    \end{beamerboxesrounded}\vskip\smallskipamount%
+  }
+
+  \setbeamertemplate{block alerted begin}{%
+    \par\vskip\medskipamount%
+    \begin{beamerboxesrounded}[upper=block title alerted,lower=block body alerted,shadow=false]%
+      {\kyotoposter@blocktitle{block title alerted}{\insertblocktitle}}%
+      \usebeamerfont{block body alerted}%
+      \kyotoposter@blockbodybegin
+  }
+  \setbeamertemplate{block alerted end}{%
+      \kyotoposter@blockbodyend
+    \end{beamerboxesrounded}\vskip\smallskipamount%
+  }
+
+  \setbeamertemplate{block example begin}{%
+    \par\vskip\medskipamount%
+    \begin{beamerboxesrounded}[upper=block title example,lower=block body example,shadow=false]%
+      {\kyotoposter@blocktitle{block title example}{\insertblocktitle}}%
+      \usebeamerfont{block body example}%
+      \kyotoposter@blockbodybegin
+  }
+  \setbeamertemplate{block example end}{%
+      \kyotoposter@blockbodyend
+    \end{beamerboxesrounded}\vskip\smallskipamount%
+  }
+\mode<all>
+
+\endinput

@@ -1,0 +1,109 @@
+%% beamerouterthemeKyotoPoster.sty
+%%
+%% Copyright 2026 Masaki Waga
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   <http://www.latex-project.org/lppl.txt>
+%% and version 1.3c or later is part of all distributions
+%% of LaTeX version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status ``maintained''.
+%%
+%% The Current Maintainer of this work is
+%% Masaki Waga, email mwaga@fos.kuis.kyoto-u.ac.jp.
+%%
+%% This work consists of the files listed in MANIFEST.md.
+%% ------------------------------------------------------------------------
+\ProvidesPackage{beamerouterthemeKyotoPoster}[2026-09-24 v1.5 Kyoto poster outer theme]
+
+\mode<presentation>
+
+%% Poster geometry: page-relative margins so the same theme works for A0,
+%% A1, portrait, and landscape layouts.  Keep the margin public because the
+%% full-bleed section ribbon uses the same inset for its text.
+\newlength\kyotopostercontentmargin
+\kyotopostercontentmargin=.025\paperwidth
+
+\setbeamersize{
+  text margin left=\kyotopostercontentmargin,
+  text margin right=\kyotopostercontentmargin
+}
+
+%% The headline height is content-driven rather than a fixed fraction of the
+%% page.  This keeps short titles compact (as in the reference poster) while
+%% still allowing a long title to wrap naturally.  Only this explicit padding
+%% is added above and below the title/author/institute group.
+\newlength\kyotoposter@headerpadding
+\kyotoposter@headerpadding=.010\paperheight
+
+\newlength\kyotoposter@headermargin
+\kyotoposter@headermargin=.035\paperwidth
+
+%% Public helpers for sizing a logo supplied through \titlegraphic.  Give
+%% both limits to \includegraphics with keepaspectratio: wide logos should
+%% not spill out of the headline merely because their height is acceptable.
+\newlength\kyotopostertitlegraphicheight
+\kyotopostertitlegraphicheight=.065\paperheight
+\newlength\kyotopostertitlegraphicwidth
+\kyotopostertitlegraphicwidth=.14\paperwidth
+
+\setbeamercolor{poster headline}{fg=KyotoBg,bg=KyotoTheme}
+\setbeamercolor{poster section}{fg=KyotoBg,bg=KyotoTheme}
+
+\setbeamertemplate{background canvas}{%
+  {\color{KyotoBg}\vrule width\paperwidth height\paperheight}%
+}
+
+%% The poster headline is the title banner; unlike the slide theme, there
+%% is no separate top strip and no footer/page number.
+\setbeamertemplate{headline}{%
+  \leavevmode
+  \begin{beamercolorbox}[wd=\paperwidth,sep=0pt]{poster headline}%
+    \vskip\kyotoposter@headerpadding
+    \hbox to \paperwidth{%
+      \hskip\kyotoposter@headermargin
+      \begin{minipage}[c]{.76\paperwidth}
+        {\usebeamerfont{poster title}\color{KyotoBg}\inserttitle\par}
+        \vspace{.22em}
+        {\usebeamerfont{poster author}\color{KyotoBg}\insertauthor\par}
+        \vspace{.08em}
+        {\usebeamerfont{poster institute}\color{KyotoBg}\insertinstitute\par}
+        {\usebeamerfont{poster date}\color{KyotoBg}\insertdate\par}
+      \end{minipage}%
+      \hfill
+      \begin{minipage}[c]{.14\paperwidth}
+        \raggedleft
+        \inserttitlegraphic
+      \end{minipage}%
+      \hskip\kyotoposter@headermargin
+    }%
+    \vskip\kyotoposter@headerpadding
+  \end{beamercolorbox}%
+}
+
+%% A visible Kyoto-navy rule along the physical bottom edge, matching the
+%% reference poster.  It is global poster furniture rather than part of any
+%% particular content block or two-column environment.  Use a page-relative
+%% thickness so the rule remains visible in an A0 overview/thumbnail.
+\setbeamercolor{poster bottom rule}{fg=KyotoTheme,bg=KyotoTheme}
+\newlength\kyotoposter@bottomruleheight
+\kyotoposter@bottomruleheight=.003\paperheight
+
+\setbeamertemplate{footline}{%
+  \leavevmode
+  \begin{beamercolorbox}[
+    wd=\paperwidth,
+    ht=\kyotoposter@bottomruleheight,
+    dp=0pt,
+    sep=0pt
+  ]{poster bottom rule}%
+  \end{beamercolorbox}%
+}
+\setbeamertemplate{navigation symbols}{}
+
+\mode<all>
+
+\endinput

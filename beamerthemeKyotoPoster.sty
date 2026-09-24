@@ -1,0 +1,241 @@
+%% beamerthemeKyotoPoster.sty
+%%
+%% Copyright 2026 Masaki Waga
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   <http://www.latex-project.org/lppl.txt>
+%% and version 1.3c or later is part of all distributions
+%% of LaTeX version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status ``maintained''.
+%%
+%% The Current Maintainer of this work is
+%% Masaki Waga, email mwaga@fos.kuis.kyoto-u.ac.jp.
+%%
+%% This work consists of the files listed in MANIFEST.md.
+%%
+%% ------------------------------------------------------------------------
+%% Kyoto poster theme for Beamer + beamerposter.
+%%
+%% Recommended usage:
+%%
+%%   \documentclass[final]{beamer}
+%%   \usepackage[size=a0,orientation=portrait,scale=1.0]{beamerposter}
+%%   \usetheme{KyotoPoster}
+%% ------------------------------------------------------------------------
+\ProvidesPackage{beamerthemeKyotoPoster}[2026-09-24 v1.11 Kyoto poster theme]
+
+\RequirePackage{etoolbox}
+
+\@ifpackageloaded{beamerposter}{}{%
+  \PackageWarning{beamerthemeKyotoPoster}{%
+    KyotoPoster is designed for beamerposter; load beamerposter before \string\usetheme}%
+}
+
+\beamer@centeredfalse
+\mode<presentation>
+  \usefonttheme{KyotoPoster}
+  \usecolortheme{Kyoto}
+  \useinnertheme{KyotoPoster}
+  \useoutertheme{KyotoPoster}
+  \setbeamerfont{alerted text}{series=\bfseries}
+\mode<all>
+
+%% Same emphasis convention as the presentation theme.
+\renewcommand\emph[1]{\textcolor{KyotoEmph}{\textbf{#1}}}
+
+%% A full-bleed poster section ribbon.  Beamer's colorbox implementation
+%% automatically compensates for the frame's left/right text margins when
+%% wd is wider than \textwidth.  The ribbon background therefore reaches
+%% both physical page edges.  The title itself is placed in a fixed-height
+%% vbox with flexible space above and below, so it is vertically centered.
+\newcommand\kyotopostersection[1]{%
+  \par\medskip
+  \begingroup
+    \usebeamerfont{poster section}%
+    \dimen@=1.35\baselineskip
+    \begin{beamercolorbox}[wd=\paperwidth,sep=0pt]{poster section}%
+      \vbox to \dimen@{%
+        \vfil
+        \hbox to \paperwidth{%
+          \hskip\kyotopostercontentmargin
+          \strut #1%
+          \hfil
+          \hskip\kyotopostercontentmargin
+        }%
+        \vfil
+      }%
+    \end{beamercolorbox}%
+  \endgroup
+  \smallskip
+}
+
+
+%% A column-local section ribbon for layouts in which the left and right
+%% halves advance through sections independently.  Inside the Kyoto
+%% two-column helper, the background is an explicit half-page box:
+%% left ribbons run from the physical left edge to the page center, and
+%% right ribbons run from the page center to the physical right edge.
+%%
+%% Do not use TeX scratch dimensions here: \colorbox and related LaTeX
+%% internals reuse \@tempdima/\@tempdimb, which previously collapsed the
+%% intended half-page width back to the local minipage width.
+\newlength\kyotoposter@columnsectionwidth
+\newlength\kyotoposter@columnsectionheight
+\newlength\kyotoposter@columnsectionshift
+\newlength\kyotoposter@columnsectionleftpad
+\newif\ifkyotoposter@firstcolumnsection
+
+\newcommand\kyotopostercolumnsection[1]{%
+  \par
+  \ifkyotoposter@firstcolumnsection
+    %% The parent two-column layout already follows whatever material
+    %% precedes it.  Suppress this first local \medskip so the center
+    %% separator starts exactly at the first ribbon rather than protruding
+    %% into the whitespace above it.
+    \kyotoposter@firstcolumnsectionfalse
+  \else
+    \medskip
+  \fi
+  \begingroup
+    \usebeamerfont{poster section}%
+    \setlength\kyotoposter@columnsectionheight{1.35\baselineskip}%
+    \setlength\kyotoposter@columnsectionwidth{\linewidth}%
+    \setlength\kyotoposter@columnsectionshift{0pt}%
+    \setlength\kyotoposter@columnsectionleftpad{.45em}%
+
+    \ifdefstring{\kyotoposter@columnside}{left}{%
+      \setlength\kyotoposter@columnsectionwidth{.5\paperwidth}%
+      \setlength\kyotoposter@columnsectionshift{-\kyotopostercontentmargin}%
+      %% Align the heading with ordinary left-column body text.
+      \setlength\kyotoposter@columnsectionleftpad{\kyotopostercontentmargin}%
+    }{%
+      \ifdefstring{\kyotoposter@columnside}{right}{%
+        \setlength\kyotoposter@columnsectionwidth{.5\paperwidth}%
+        \setlength\kyotoposter@columnsectionshift{-\kyotoposter@columncenteroverhang}%
+        %% Start just to the right of the center divider.
+        \setlength\kyotoposter@columnsectionleftpad{.45em}%
+      }{}%
+    }%
+
+    \noindent
+    \hbox to \linewidth{%
+      \kern\kyotoposter@columnsectionshift
+      \begingroup
+        \fboxsep=0pt%
+        \colorbox{KyotoTheme}{%
+          \vbox to \kyotoposter@columnsectionheight{%
+            \vfil
+            \hbox to \kyotoposter@columnsectionwidth{%
+              \hskip\kyotoposter@columnsectionleftpad
+              {\color{KyotoBg}\strut #1}%
+              \hfil
+            }%
+            \vfil
+          }%
+        }%
+      \endgroup
+      \hss
+    }%
+  \endgroup
+  \smallskip
+}
+
+%% Independent two-column layout.  The left/right child environments capture
+%% their bodies as token lists; the parent typesets those token lists into
+%% top-aligned minipages only after both have been collected.  This avoids
+%% the savebox/lrbox grouping problem that can discard the collected content.
+%%
+%% In the unstarred environment, a running \vrule separates the columns.
+%% The page-wide bottom rule is supplied by the poster outer theme.  The
+%% starred environment keeps the same 49%/49% geometry without the vertical
+%% separator.
+\newtoks\kyotoposter@leftcolumntoks
+\newtoks\kyotoposter@rightcolumntoks
+\newsavebox\kyotoposter@leftcolumnbox
+\newsavebox\kyotoposter@rightcolumnbox
+\newlength\kyotoposter@columnwidth
+\newlength\kyotoposter@columncenteroverhang
+\newif\ifkyotoposter@columnseparator
+\def\kyotoposter@columnside{none}
+
+\newcommand\kyotoposter@twocolumnsbegin[1]{%
+  \par\begingroup
+  \ifstrequal{#1}{true}{%
+    \kyotoposter@columnseparatortrue
+  }{%
+    \kyotoposter@columnseparatorfalse
+  }%
+  \setlength\kyotoposter@columnwidth{.49\linewidth}%
+  %% With two 49% columns, each column's inner edge sits 1% of the
+  %% parent content width away from the physical page center.
+  \setlength\kyotoposter@columncenteroverhang{.01\linewidth}%
+  \global\kyotoposter@leftcolumntoks={}%
+  \global\kyotoposter@rightcolumntoks={}%
+}
+
+\newcommand\kyotoposter@typesetcolumn[3]{%
+  \sbox#1{%
+    \begin{minipage}[t]{\kyotoposter@columnwidth}%
+      \vspace*{0pt}%
+      \def\kyotoposter@columnside{#2}%
+      \kyotoposter@firstcolumnsectiontrue
+      #3%
+    \end{minipage}%
+  }%
+}
+
+\newcommand\kyotoposter@twocolumnsend{%
+  \kyotoposter@typesetcolumn{\kyotoposter@leftcolumnbox}{left}{%
+    \the\kyotoposter@leftcolumntoks
+  }%
+  \kyotoposter@typesetcolumn{\kyotoposter@rightcolumnbox}{right}{%
+    \the\kyotoposter@rightcolumntoks
+  }%
+  \par\noindent
+  \vbox{%
+    \hbox to \linewidth{%
+      \usebox\kyotoposter@leftcolumnbox
+      \hfil
+      \ifkyotoposter@columnseparator
+        {\usebeamerfont{normal text}\color{KyotoTheme}\vrule width .10em}%
+      \fi
+      \hfil
+      \usebox\kyotoposter@rightcolumnbox
+    }%
+  }%
+  \par\endgroup
+}
+
+\newenvironment{kyotopostertwocolumns}{%
+  \kyotoposter@twocolumnsbegin{true}%
+}{%
+  \kyotoposter@twocolumnsend
+}
+
+\newenvironment{kyotopostertwocolumns*}{%
+  \kyotoposter@twocolumnsbegin{false}%
+}{%
+  \kyotoposter@twocolumnsend
+}
+
+\NewDocumentEnvironment{kyotoposterleftcolumn}{+b}{%
+  \global\kyotoposter@leftcolumntoks={#1}%
+}{}
+
+\NewDocumentEnvironment{kyotoposterrightcolumn}{+b}{%
+  \global\kyotoposter@rightcolumntoks={#1}%
+}{}
+
+\AtBeginDocument{%
+  \hypersetup{%
+    linkcolor = KyotoLink,
+    urlcolor  = KyotoLink,
+    citecolor = KyotoLink,
+  }%
+}
+
+\endinput
