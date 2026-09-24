@@ -26,7 +26,7 @@
 %%   \usepackage[size=a0,orientation=portrait,scale=1.0]{beamerposter}
 %%   \usetheme{KyotoPoster}
 %% ------------------------------------------------------------------------
-\ProvidesPackage{beamerthemeKyotoPoster}[2026-09-24 v1.1 Kyoto poster theme]
+\ProvidesPackage{beamerthemeKyotoPoster}[2026-09-24 v1.2 Kyoto poster theme]
 
 \RequirePackage{etoolbox}
 
@@ -47,11 +47,11 @@
 %% Same emphasis convention as the presentation theme.
 \renewcommand\emph[1]{\textcolor{KyotoEmph}{\textbf{#1}}}
 
-%% A full-bleed poster section ribbon.  The frame body itself observes the
-%% poster content margin, so put the ribbon in a box as wide as the paper
-%% and shift it back over that margin.  The ribbon background therefore
-%% reaches both physical page edges, while its text stays aligned with the
-%% ordinary poster body.
+%% A full-bleed poster section ribbon.  Beamer's colorbox implementation
+%% automatically compensates for the frame's left/right text margins when
+%% wd is wider than \textwidth.  Therefore the paper-width colorbox itself
+%% already reaches both physical page edges; do not shift it again.  The
+%% explicit left/right skips keep the title aligned with ordinary body text.
 \newbox\kyotoposter@sectionbox
 \newcommand\kyotopostersection[1]{%
   \par\medskip
@@ -67,7 +67,7 @@
       \vskip.32em
     \end{beamercolorbox}%
   }%
-  \moveleft\kyotopostercontentmargin\box\kyotoposter@sectionbox
+  \box\kyotoposter@sectionbox
   \smallskip
 }
 
