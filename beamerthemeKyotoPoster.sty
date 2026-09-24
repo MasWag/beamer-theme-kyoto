@@ -26,7 +26,7 @@
 %%   \usepackage[size=a0,orientation=portrait,scale=1.0]{beamerposter}
 %%   \usetheme{KyotoPoster}
 %% ------------------------------------------------------------------------
-\ProvidesPackage{beamerthemeKyotoPoster}[2026-09-24 v1.8 Kyoto poster theme]
+\ProvidesPackage{beamerthemeKyotoPoster}[2026-09-24 v1.9 Kyoto poster theme]
 
 \RequirePackage{etoolbox}
 
@@ -76,36 +76,51 @@
 
 %% A column-local section ribbon for layouts in which the left and right
 %% halves advance through sections independently.  Inside the Kyoto
-%% two-column helper, the ribbon is drawn as an explicit half-page box:
+%% two-column helper, the background is an explicit half-page box:
 %% left ribbons run from the physical left edge to the page center, and
 %% right ribbons run from the page center to the physical right edge.
-%% This deliberately bypasses minipage/colorbox width clipping.
+%%
+%% Do not use TeX scratch dimensions here: \colorbox and related LaTeX
+%% internals reuse \@tempdima/\@tempdimb, which previously collapsed the
+%% intended half-page width back to the local minipage width.
+\newlength\kyotoposter@columnsectionwidth
+\newlength\kyotoposter@columnsectionheight
+\newlength\kyotoposter@columnsectionshift
+\newlength\kyotoposter@columnsectionleftpad
+
 \newcommand\kyotopostercolumnsection[1]{%
   \par\medskip
   \begingroup
     \usebeamerfont{poster section}%
-    \@tempdima=1.35\baselineskip
-    \def\kyotoposter@columnsectionshift{0pt}%
-    \@tempdimb=\linewidth
+    \setlength\kyotoposter@columnsectionheight{1.35\baselineskip}%
+    \setlength\kyotoposter@columnsectionwidth{\linewidth}%
+    \setlength\kyotoposter@columnsectionshift{0pt}%
+    \setlength\kyotoposter@columnsectionleftpad{.45em}%
+
     \ifstrequal{\kyotoposter@columnside}{left}{%
-      \edef\kyotoposter@columnsectionshift{-\the\kyotopostercontentmargin}%
-      \@tempdimb=.5\paperwidth
+      \setlength\kyotoposter@columnsectionwidth{.5\paperwidth}%
+      \setlength\kyotoposter@columnsectionshift{-\kyotopostercontentmargin}%
+      %% Align the heading with ordinary left-column body text.
+      \setlength\kyotoposter@columnsectionleftpad{\kyotopostercontentmargin}%
     }{%
       \ifstrequal{\kyotoposter@columnside}{right}{%
-        \edef\kyotoposter@columnsectionshift{-\the\kyotoposter@columncenteroverhang}%
-        \@tempdimb=.5\paperwidth
+        \setlength\kyotoposter@columnsectionwidth{.5\paperwidth}%
+        \setlength\kyotoposter@columnsectionshift{-\kyotoposter@columncenteroverhang}%
+        %% Start just to the right of the center divider.
+        \setlength\kyotoposter@columnsectionleftpad{.45em}%
       }{}%
     }%
+
     \noindent
     \hbox to \linewidth{%
       \kern\kyotoposter@columnsectionshift
       \begingroup
         \fboxsep=0pt%
         \colorbox{KyotoTheme}{%
-          \vbox to \@tempdima{%
+          \vbox to \kyotoposter@columnsectionheight{%
             \vfil
-            \hbox to \@tempdimb{%
-              \hfil
+            \hbox to \kyotoposter@columnsectionwidth{%
+              \hskip\kyotoposter@columnsectionleftpad
               {\color{KyotoBg}\strut #1}%
               \hfil
             }%

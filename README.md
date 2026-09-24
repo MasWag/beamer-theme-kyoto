@@ -158,7 +158,8 @@ pair.
 `\kyotopostercolumnsection{...}` is intended for these independent poster
 columns. Its navy background extends from the physical outer page edge to
 the center separator (left edge to center on the left, center to right edge
-on the right), matching the RV-poster layout. Standard Beamer `columns`
+on the right), matching the RV-poster layout. Column-section headings are
+left-aligned by default rather than centered. Standard Beamer `columns`
 remain available for layouts that do not need these helpers.
 ### Title page
 
