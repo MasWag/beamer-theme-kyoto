@@ -8,10 +8,15 @@ add it to the appropriate section below.
 ## Theme source
 
 - `beamerthemeKyoto.sty`
+- `beamerthemeKyotoPoster.sty`
 - `beamercolorthemeKyoto.sty`
 - `beamerfontthemeKyoto.sty`
+- `beamerfontthemeKyotoPoster.sty`
 - `beamerinnerthemeKyoto.sty`
+- `beamerinnerthemeKyotoPoster.sty`
 - `beamerouterthemeKyoto.sty`
+- `beamerouterthemeKyotoPoster.sty`
+- `kyotofonts.sty`
 
 ## TikZ library
 
@@ -20,6 +25,7 @@ add it to the appropriate section below.
 ## Example
 
 - `examples/demo.tex`
+- `examples/poster-demo.tex`
 - `examples/tikz-demo.tex`
 - `examples/tikz-standalone.tex`
 - `examples/latexmkrc`

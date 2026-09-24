@@ -20,7 +20,7 @@ jobs:
       #   texlive-latex-recommended  beamer itself, translator, xcolor,
       #                              fontspec, xkeyval
       #   texlive-latex-extra        everyhook (beamer's font-size
-      #                              hooks); also `standalone' and
+      #                              hooks), `beamerposter`; also `standalone' and
       #                              `preview', which
       #                              tikz-standalone.tex's
       #                              `\documentclass[tikz]{standalone}'
@@ -93,6 +93,12 @@ jobs:
         with:
           name: demo-pdf
           path: examples/demo.pdf
+
+      - name: Upload poster-demo.pdf
+        uses: actions/upload-artifact@v4
+        with:
+          name: poster-demo-pdf
+          path: examples/poster-demo.pdf
 
       - name: Upload tikz-demo.pdf
         uses: actions/upload-artifact@v4

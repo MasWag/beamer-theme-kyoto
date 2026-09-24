@@ -2,7 +2,8 @@
 
 A [Beamer](https://ctan.org/pkg/beamer) theme with a light background, a
 navy top/bottom band, bold centered titles, and support for mixed
-Japanese/English text. It is a Beamer port / counterpart of the
+Japanese/English text. The repository also provides a matching
+`KyotoPoster` theme for posters built with `beamerposter`. It is a Beamer port / counterpart of the
 [SLyDIFi Kyoto theme](https://github.com/MasWag/slydifi-kyoto-demo)
 (a theme for the [SLyDIFi](https://github.com/na-o-ys/slydifi) class),
 reimplemented independently for Beamer.
@@ -12,6 +13,8 @@ reimplemented independently for Beamer.
 - **LuaLaTeX** is the reference engine (not pdfLaTeX/XeLaTeX).
 - `fontspec` and `luatexja-fontspec` (for Japanese text), `kvoptions`,
   `etoolbox` -- all commonly available in a standard TeX Live install.
+- Poster use additionally requires `beamerposter` (normally provided by a
+  standard/full TeX Live installation).
 - Fonts, each with a fallback if not installed (see
   `beamerfontthemeKyoto.sty`):
   - **Noto Sans** -- Latin body/UI text (falls back to Helvetica
@@ -41,9 +44,9 @@ This theme is not published on CTAN; use it by cloning this repository
 ```
 
 Put `beamerthemeKyoto.sty`, `beamercolorthemeKyoto.sty`,
-`beamerfontthemeKyoto.sty`, `beamerinnerthemeKyoto.sty` and
-`beamerouterthemeKyoto.sty` (all in the repository root) somewhere LaTeX
-can find them -- either alongside your `.tex` file, on `TEXINPUTS`, or
+`beamerfontthemeKyoto.sty`, `beamerinnerthemeKyoto.sty`,
+`beamerouterthemeKyoto.sty`, and `kyotofonts.sty` (all in the repository
+root) somewhere LaTeX can find them -- either alongside your `.tex` file, on `TEXINPUTS`, or
 installed into your local TEXMF tree. There is no packaged/CTAN
 installation.
 
@@ -67,6 +70,50 @@ override the theme options above after the fact:
 
 - `\kyotototalpagenum{true|false}` -- toggle the `frame/total` footer.
 - `\kyotofooter{<text>}` -- set the right-hand footer text.
+
+
+## Poster usage
+
+```latex
+\documentclass[final]{beamer}
+
+\usepackage[
+  size=a0,
+  orientation=portrait,
+  scale=1.0
+]{beamerposter}
+
+\usetheme{KyotoPoster}
+
+\title{My Poster}
+\author{My Name}
+\institute{My Institute}
+\date{}
+\titlegraphic{%
+  \includegraphics[
+    height=\kyotopostertitlegraphicheight
+  ]{logo.pdf}%
+}
+
+\begin{document}
+\begin{frame}[t]
+  \kyotopostersection{Motivation}
+  % poster content, columns, blocks, figures, ...
+\end{frame}
+\end{document}
+```
+
+Load `beamerposter` before `\usetheme{KyotoPoster}` so that the document
+can choose its own paper size, orientation, and scale. The poster theme
+reuses the Kyoto palette, font families, block styling, emphasis, and TikZ
+library, but has poster-specific typography and geometry: the headline is
+the title banner and there is no slide footer or frame counter.
+
+`\kyotopostersection{...}` draws a navy section ribbon using the current
+`\linewidth`, so it can span either the whole poster or one column.
+`\kyotopostertitlegraphicheight` is the recommended height for a logo in
+`\titlegraphic`. See `examples/poster-demo.tex` for a complete A0
+portrait example.
 
 ### Title page
 
@@ -117,8 +164,8 @@ Japanese/English text.
 make
 ```
 
-from the repository root builds `examples/demo.pdf` and
-`examples/tikz-demo.pdf` with `latexmk` and LuaLaTeX
+from the repository root builds `examples/demo.pdf`,
+`examples/poster-demo.pdf`, and the TikZ examples with `latexmk` and LuaLaTeX
 (`examples/latexmkrc` points `TEXINPUTS` at the theme files in the
 repository root, so nothing needs installing into TEXMF first).
 Equivalently, from the `examples/` directory: `latexmk demo.tex` or
