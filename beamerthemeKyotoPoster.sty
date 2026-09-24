@@ -1,0 +1,72 @@
+%% beamerthemeKyotoPoster.sty
+%%
+%% Copyright 2026 Masaki Waga
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   <http://www.latex-project.org/lppl.txt>
+%% and version 1.3c or later is part of all distributions
+%% of LaTeX version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status ``maintained''.
+%%
+%% The Current Maintainer of this work is
+%% Masaki Waga, email mwaga@fos.kuis.kyoto-u.ac.jp.
+%%
+%% This work consists of the files listed in MANIFEST.md.
+%%
+%% ------------------------------------------------------------------------
+%% Kyoto poster theme for Beamer + beamerposter.
+%%
+%% Recommended usage:
+%%
+%%   \documentclass[final]{beamer}
+%%   \usepackage[size=a0,orientation=portrait,scale=1.0]{beamerposter}
+%%   \usetheme{KyotoPoster}
+%% ------------------------------------------------------------------------
+\ProvidesPackage{beamerthemeKyotoPoster}[2026-09-24 v1.0 Kyoto poster theme]
+
+\RequirePackage{etoolbox}
+
+\@ifpackageloaded{beamerposter}{}{%
+  \PackageWarning{beamerthemeKyotoPoster}{%
+    KyotoPoster is designed for beamerposter; load beamerposter before \string\usetheme}%
+}
+
+\beamer@centeredfalse
+\mode<presentation>
+  \usefonttheme{KyotoPoster}
+  \usecolortheme{Kyoto}
+  \useinnertheme{KyotoPoster}
+  \useoutertheme{KyotoPoster}
+  \setbeamerfont{alerted text}{series=\bfseries}
+\mode<all>
+
+%% Same emphasis convention as the presentation theme.
+\renewcommand\emph[1]{\textcolor{KyotoEmph}{\textbf{#1}}}
+
+%% A reusable full-width (or column-width) poster section ribbon.
+\newcommand\kyotopostersection[1]{%
+  \par\medskip
+  \begin{beamercolorbox}[
+    wd=\linewidth,
+    sep=.45em,
+    leftskip=.35em,
+    rightskip=.35em
+  ]{poster section}%
+    \usebeamerfont{poster section}#1%
+  \end{beamercolorbox}%
+  \smallskip
+}
+
+\AtBeginDocument{%
+  \hypersetup{%
+    linkcolor = KyotoLink,
+    urlcolor  = KyotoLink,
+    citecolor = KyotoLink,
+  }%
+}
+
+\endinput

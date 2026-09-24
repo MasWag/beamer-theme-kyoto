@@ -1,0 +1,86 @@
+%% beamerouterthemeKyotoPoster.sty
+%%
+%% Copyright 2026 Masaki Waga
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   <http://www.latex-project.org/lppl.txt>
+%% and version 1.3c or later is part of all distributions
+%% of LaTeX version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status ``maintained''.
+%%
+%% The Current Maintainer of this work is
+%% Masaki Waga, email mwaga@fos.kuis.kyoto-u.ac.jp.
+%%
+%% This work consists of the files listed in MANIFEST.md.
+%% ------------------------------------------------------------------------
+\ProvidesPackage{beamerouterthemeKyotoPoster}[2026-09-24 v1.0 Kyoto poster outer theme]
+
+\mode<presentation>
+
+%% Poster geometry: page-relative margins so the same theme works for A0,
+%% A1, portrait, and landscape layouts.
+\setbeamersize{
+  text margin left=.025\paperwidth,
+  text margin right=.025\paperwidth
+}
+
+\newlength\kyotoposter@headerheight
+\kyotoposter@headerheight=.125\paperheight
+
+\newlength\kyotoposter@headermargin
+\kyotoposter@headermargin=.035\paperwidth
+
+%% Public helper for sizing a logo supplied through \titlegraphic.
+\newlength\kyotopostertitlegraphicheight
+\kyotopostertitlegraphicheight=.080\paperheight
+
+\setbeamercolor{poster headline}{fg=KyotoBg,bg=KyotoTheme}
+\setbeamercolor{poster section}{fg=KyotoBg,bg=KyotoTheme}
+
+\setbeamertemplate{background canvas}{%
+  {\color{KyotoBg}\vrule width\paperwidth height\paperheight}%
+}
+
+%% The poster headline is the title banner; unlike the slide theme, there
+%% is no separate top strip and no footer/page number.
+\setbeamertemplate{headline}{%
+  \leavevmode
+  \begin{beamercolorbox}[
+    wd=\paperwidth,
+    ht=\kyotoposter@headerheight,
+    dp=0ex
+  ]{poster headline}%
+    \vbox to \kyotoposter@headerheight{%
+      \vfil
+      \hbox to \paperwidth{%
+        \hskip\kyotoposter@headermargin
+        \begin{minipage}[c]{.72\paperwidth}
+          {\usebeamerfont{poster title}\color{KyotoBg}\inserttitle\par}
+          \vspace{.35em}
+          {\usebeamerfont{poster author}\color{KyotoBg}\insertauthor\par}
+          \vspace{.18em}
+          {\usebeamerfont{poster institute}\color{KyotoBg}\insertinstitute\par}
+          {\usebeamerfont{poster date}\color{KyotoBg}\insertdate\par}
+        \end{minipage}%
+        \hfill
+        \begin{minipage}[c]{.16\paperwidth}
+          \raggedleft
+          \inserttitlegraphic
+        \end{minipage}%
+        \hskip\kyotoposter@headermargin
+      }%
+      \vfil
+    }%
+  \end{beamercolorbox}%
+}
+
+\setbeamertemplate{footline}{}
+\setbeamertemplate{navigation symbols}{}
+
+\mode<all>
+
+\endinput

@@ -1,0 +1,42 @@
+%% beamerinnerthemeKyotoPoster.sty
+%%
+%% Copyright 2026 Masaki Waga
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   <http://www.latex-project.org/lppl.txt>
+%% and version 1.3c or later is part of all distributions
+%% of LaTeX version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status ``maintained''.
+%%
+%% The Current Maintainer of this work is
+%% Masaki Waga, email mwaga@fos.kuis.kyoto-u.ac.jp.
+%%
+%% This work consists of the files listed in MANIFEST.md.
+%% ------------------------------------------------------------------------
+\ProvidesPackage{beamerinnerthemeKyotoPoster}[2026-09-24 v1.0 Kyoto poster inner theme]
+
+%% Reuse the presentation theme's block/list visual language, then override
+%% fixed-point list spacing with font-relative spacing suitable for posters.
+\RequirePackage{beamerinnerthemeKyoto}
+
+\mode<presentation>
+  \g@addto@macro\@listi{%
+    \setlength\itemsep{.55em plus .12em minus .08em}%
+    \setlength\parsep{.20em plus .05em}%
+  }
+  \let\@listI\@listi
+  \g@addto@macro\@listii{%
+    \setlength\itemsep{.45em plus .10em minus .06em}%
+    \setlength\parsep{.16em plus .04em}%
+  }
+  \g@addto@macro\@listiii{%
+    \setlength\itemsep{.40em plus .08em minus .05em}%
+    \setlength\parsep{.14em plus .04em}%
+  }
+\mode<all>
+
+\endinput

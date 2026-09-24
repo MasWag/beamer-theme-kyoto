@@ -1,0 +1,69 @@
+%% beamerfontthemeKyotoPoster.sty
+%%
+%% Copyright 2026 Masaki Waga
+%%
+%% This work may be distributed and/or modified under the
+%% conditions of the LaTeX Project Public License, either version 1.3c
+%% of this license or (at your option) any later version.
+%% The latest version of this license is in
+%%   <http://www.latex-project.org/lppl.txt>
+%% and version 1.3c or later is part of all distributions
+%% of LaTeX version 2005/12/01 or later.
+%%
+%% This work has the LPPL maintenance status ``maintained''.
+%%
+%% The Current Maintainer of this work is
+%% Masaki Waga, email mwaga@fos.kuis.kyoto-u.ac.jp.
+%%
+%% This work consists of the files listed in MANIFEST.md.
+%% ------------------------------------------------------------------------
+\ProvidesPackage{beamerfontthemeKyotoPoster}[2026-09-24 v1.0 Kyoto poster font theme]
+
+\RequirePackage{kyotofonts}
+
+%% beamerposter normally provides these extra size commands.  The fallbacks
+%% keep the theme usable enough to emit a helpful warning if beamerposter
+%% was accidentally omitted.
+\providecommand\veryHuge{\huge}
+\providecommand\VeryHuge{\Huge}
+\providecommand\VERYHuge{\Huge}
+
+\mode<presentation>
+  \setbeamerfont{poster title}{
+    family=\kyoto@titlefamily,
+    size=\VeryHuge,
+    series=\bfseries
+  }
+  \setbeamerfont{poster author}{size=\Large,series=\bfseries}
+  \setbeamerfont{poster institute}{size=\large}
+  \setbeamerfont{poster date}{size=\normalsize}
+  \setbeamerfont{poster section}{
+    family=\kyoto@titlefamily,
+    size=\LARGE,
+    series=\bfseries
+  }
+
+  \setbeamerfont{block title}{
+    family=\kyoto@titlefamily,
+    size=\Large,
+    series=\bfseries
+  }
+  \setbeamerfont{block body}{size=\normalsize}
+  \setbeamerfont{block title alerted}{
+    family=\kyoto@titlefamily,
+    size=\Large,
+    series=\bfseries
+  }
+  \setbeamerfont{block body alerted}{size=\normalsize}
+  \setbeamerfont{block title example}{
+    family=\kyoto@titlefamily,
+    size=\Large,
+    series=\bfseries
+  }
+  \setbeamerfont{block body example}{size=\normalsize}
+
+  \setbeamerfont{itemize/enumerate subbody}{size=\normalsize}
+  \setbeamerfont{itemize/enumerate subsubbody}{size=\normalsize}
+\mode<all>
+
+\endinput

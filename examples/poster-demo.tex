@@ -1,0 +1,95 @@
+% examples/poster-demo.tex
+%
+% Smoke-test/demo for the reusable KyotoPoster theme.
+%
+% Build from the repository root with:
+%   make
+%
+\documentclass[final]{beamer}
+
+\usepackage[
+  size=a0,
+  orientation=portrait,
+  scale=1.0
+]{beamerposter}
+
+\usetheme{KyotoPoster}
+
+\usepackage{tikz}
+\usetikzlibrary{kyoto,positioning}
+
+\title{Kyoto Poster Theme Demo}
+\author{Masaki Waga}
+\institute{Kyoto University}
+\date{Reusable Beamer poster styling}
+\titlegraphic{%
+  \includegraphics[
+    height=\kyotopostertitlegraphicheight
+  ]{images/dummy-university-logo.pdf}%
+}
+
+\begin{document}
+
+\begin{frame}[t]
+  \vspace{1em}
+
+  \kyotopostersection{Overview}
+
+  \begin{columns}[t,totalwidth=\textwidth]
+    \begin{column}{.48\textwidth}
+      \begin{block}{Shared visual language}
+        KyotoPoster reuses the presentation theme's colors, font
+        families, rounded blocks, emphasis convention, and optional
+        TikZ styles, while using poster-specific typography and geometry.
+
+        \begin{itemize}
+          \item Navy title and section bands
+          \item Roboto Condensed headings and Noto Sans body text
+          \item \emph{Red bold emphasis} for key points
+          \item Relative list spacing that scales with poster text
+        \end{itemize}
+      \end{block}
+    \end{column}
+
+    \begin{column}{.48\textwidth}
+      \begin{alertblock}{Poster-specific layout}
+        The poster has no slide footer, frame counter, or slide title
+        strip.  The headline itself carries the poster metadata and logo.
+      \end{alertblock}
+
+      \begin{exampleblock}{日本語 / English}
+        京都大学のポスターでも、発表スライドと同じ視覚言語を
+        再利用できます。
+      \end{exampleblock}
+    \end{column}
+  \end{columns}
+
+  \kyotopostersection{Reusable Components}
+
+  \begin{columns}[t,totalwidth=\textwidth]
+    \begin{column}{.48\textwidth}
+      \begin{block}{Equations and text}
+        Ordinary Beamer content remains available:
+        \[
+          P(M \models \varphi)=P(M' \models \varphi).
+        \]
+        The poster theme deliberately leaves the scientific layout to the
+        document instead of introducing poster-specific column abstractions.
+      \end{block}
+    \end{column}
+
+    \begin{column}{.48\textwidth}
+      \begin{block}{Kyoto TikZ styles}
+        \centering
+        \begin{tikzpicture}[node distance=5cm]
+          \node[kyoto/box] (a) {Original};
+          \node[kyoto/box, right=of a] (b) {Reduced};
+          \draw[kyoto/arrow] (a) -- (b)
+            node[kyoto/label, midway, above] {shortcut};
+        \end{tikzpicture}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\end{document}
