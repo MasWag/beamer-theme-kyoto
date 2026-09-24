@@ -17,15 +17,19 @@
 %%
 %% This work consists of the files listed in MANIFEST.md.
 %% ------------------------------------------------------------------------
-\ProvidesPackage{beamerouterthemeKyotoPoster}[2026-09-24 v1.0 Kyoto poster outer theme]
+\ProvidesPackage{beamerouterthemeKyotoPoster}[2026-09-24 v1.1 Kyoto poster outer theme]
 
 \mode<presentation>
 
 %% Poster geometry: page-relative margins so the same theme works for A0,
-%% A1, portrait, and landscape layouts.
+%% A1, portrait, and landscape layouts.  Keep the margin public because the
+%% full-bleed section ribbon must shift itself over exactly this distance.
+\newlength\kyotopostercontentmargin
+\kyotopostercontentmargin=.025\paperwidth
+
 \setbeamersize{
-  text margin left=.025\paperwidth,
-  text margin right=.025\paperwidth
+  text margin left=\kyotopostercontentmargin,
+  text margin right=\kyotopostercontentmargin
 }
 
 \newlength\kyotoposter@headerheight

@@ -109,8 +109,10 @@ reuses the Kyoto palette, font families, block styling, emphasis, and TikZ
 library, but has poster-specific typography and geometry: the headline is
 the title banner and there is no slide footer or frame counter.
 
-`\kyotopostersection{...}` draws a navy section ribbon using the current
-`\linewidth`, so it can span either the whole poster or one column.
+`\kyotopostersection{...}` draws a full-bleed navy section ribbon whose
+background reaches both physical page edges; its text remains aligned with
+the ordinary poster body margin. Use it at the top level of the poster frame,
+not inside a column.
 `\kyotopostertitlegraphicheight` is the recommended height for a logo in
 `\titlegraphic`. See `examples/poster-demo.tex` for a complete A0
 portrait example.

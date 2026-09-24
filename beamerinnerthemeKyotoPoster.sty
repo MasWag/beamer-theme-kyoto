@@ -17,13 +17,14 @@
 %%
 %% This work consists of the files listed in MANIFEST.md.
 %% ------------------------------------------------------------------------
-\ProvidesPackage{beamerinnerthemeKyotoPoster}[2026-09-24 v1.0 Kyoto poster inner theme]
+\ProvidesPackage{beamerinnerthemeKyotoPoster}[2026-09-24 v1.1 Kyoto poster inner theme]
 
 %% Reuse the presentation theme's block/list visual language, then override
-%% fixed-point list spacing with font-relative spacing suitable for posters.
+%% fixed-point spacing that is too small on a poster.
 \RequirePackage{beamerinnerthemeKyoto}
 
 \mode<presentation>
+  %% Font-relative list spacing suitable for poster text.
   \g@addto@macro\@listi{%
     \setlength\itemsep{.55em plus .12em minus .08em}%
     \setlength\parsep{.20em plus .05em}%
@@ -36,6 +37,52 @@
   \g@addto@macro\@listiii{%
     \setlength\itemsep{.40em plus .08em minus .05em}%
     \setlength\parsep{.14em plus .04em}%
+  }
+
+  %% Beamer's rounded-block implementation uses fixed 4bp-ish title
+  %% insets, which are visually too tight once beamerposter scales the
+  %% text.  Keep the same rounded box machinery and colors, but wrap each
+  %% title in font-relative horizontal/vertical padding.
+  \newcommand\kyotoposter@blocktitle[2]{%
+    \hspace*{.50em}%
+    \parbox{\dimexpr\linewidth-1.00em\relax}{%
+      \vspace*{.30em}%
+      \raggedright\usebeamerfont*{#1}#2\par
+      \vspace*{.30em}%
+    }%
+  }
+
+  \setbeamertemplate{block begin}{%
+    \par\vskip\medskipamount%
+    \begin{beamerboxesrounded}[upper=block title,lower=block body,shadow=false]%
+      {\kyotoposter@blocktitle{block title}{\insertblocktitle}}%
+      \raggedright%
+      \usebeamerfont{block body}%
+  }
+  \setbeamertemplate{block end}{%
+    \end{beamerboxesrounded}\vskip\smallskipamount%
+  }
+
+  \setbeamertemplate{block alerted begin}{%
+    \par\vskip\medskipamount%
+    \begin{beamerboxesrounded}[upper=block title alerted,lower=block body alerted,shadow=false]%
+      {\kyotoposter@blocktitle{block title alerted}{\insertblocktitle}}%
+      \raggedright%
+      \usebeamerfont{block body alerted}%
+  }
+  \setbeamertemplate{block alerted end}{%
+    \end{beamerboxesrounded}\vskip\smallskipamount%
+  }
+
+  \setbeamertemplate{block example begin}{%
+    \par\vskip\medskipamount%
+    \begin{beamerboxesrounded}[upper=block title example,lower=block body example,shadow=false]%
+      {\kyotoposter@blocktitle{block title example}{\insertblocktitle}}%
+      \raggedright%
+      \usebeamerfont{block body example}%
+  }
+  \setbeamertemplate{block example end}{%
+    \end{beamerboxesrounded}\vskip\smallskipamount%
   }
 \mode<all>
 
