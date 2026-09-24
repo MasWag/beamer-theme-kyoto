@@ -26,7 +26,7 @@
 %%   \usepackage[size=a0,orientation=portrait,scale=1.0]{beamerposter}
 %%   \usetheme{KyotoPoster}
 %% ------------------------------------------------------------------------
-\ProvidesPackage{beamerthemeKyotoPoster}[2026-09-24 v1.7 Kyoto poster theme]
+\ProvidesPackage{beamerthemeKyotoPoster}[2026-09-24 v1.8 Kyoto poster theme]
 
 \RequirePackage{etoolbox}
 
@@ -75,44 +75,46 @@
 
 
 %% A column-local section ribbon for layouts in which the left and right
-%% halves advance through sections independently.  Within
-%% kyotopostertwocolumns, the background extends from the physical outer
-%% page edge all the way to the center separator, as in the RV poster.
-%% Outside that helper it falls back to the current \linewidth.
+%% halves advance through sections independently.  Inside the Kyoto
+%% two-column helper, the ribbon is drawn as an explicit half-page box:
+%% left ribbons run from the physical left edge to the page center, and
+%% right ribbons run from the page center to the physical right edge.
+%% This deliberately bypasses minipage/colorbox width clipping.
 \newcommand\kyotopostercolumnsection[1]{%
   \par\medskip
   \begingroup
     \usebeamerfont{poster section}%
-    \@tempdima=\linewidth
+    \@tempdima=1.35\baselineskip
     \def\kyotoposter@columnsectionshift{0pt}%
+    \@tempdimb=\linewidth
     \ifstrequal{\kyotoposter@columnside}{left}{%
-      \advance\@tempdima by \kyotopostercontentmargin
-      \advance\@tempdima by \kyotoposter@columninneroverhang
       \edef\kyotoposter@columnsectionshift{-\the\kyotopostercontentmargin}%
+      \@tempdimb=.5\paperwidth
     }{%
       \ifstrequal{\kyotoposter@columnside}{right}{%
-        \advance\@tempdima by \kyotoposter@columninneroverhang
-        \advance\@tempdima by \kyotopostercontentmargin
-        \edef\kyotoposter@columnsectionshift{-\the\kyotoposter@columninneroverhang}%
+        \edef\kyotoposter@columnsectionshift{-\the\kyotoposter@columncenteroverhang}%
+        \@tempdimb=.5\paperwidth
       }{}%
     }%
-    \@tempdimb=1.35\baselineskip
-    \hspace*{\kyotoposter@columnsectionshift}%
-    \begingroup
-      \fboxsep=0pt%
-      \usebeamercolor{poster section}%
-      \colorbox{bg}{%
-        \vbox to \@tempdimb{%
-          \vfil
-          \hbox to \@tempdima{%
-            \hfil
-            {\color{fg}\strut #1}%
-            \hfil
+    \noindent
+    \hbox to \linewidth{%
+      \kern\kyotoposter@columnsectionshift
+      \begingroup
+        \fboxsep=0pt%
+        \colorbox{KyotoTheme}{%
+          \vbox to \@tempdima{%
+            \vfil
+            \hbox to \@tempdimb{%
+              \hfil
+              {\color{KyotoBg}\strut #1}%
+              \hfil
+            }%
+            \vfil
           }%
-          \vfil
         }%
-      }%
-    \endgroup
+      \endgroup
+      \hss
+    }%
   \endgroup
   \smallskip
 }
@@ -131,7 +133,7 @@
 \newsavebox\kyotoposter@leftcolumnbox
 \newsavebox\kyotoposter@rightcolumnbox
 \newlength\kyotoposter@columnwidth
-\newlength\kyotoposter@columninneroverhang
+\newlength\kyotoposter@columncenteroverhang
 \newif\ifkyotoposter@columnseparator
 \def\kyotoposter@columnside{none}
 
@@ -143,10 +145,9 @@
     \kyotoposter@columnseparatorfalse
   }%
   \setlength\kyotoposter@columnwidth{.49\linewidth}%
-  \setlength\kyotoposter@columninneroverhang{.01\linewidth}%
-  \ifkyotoposter@columnseparator
-    \addtolength\kyotoposter@columninneroverhang{-.05em}%
-  \fi
+  %% With two 49% columns, each column's inner edge sits 1% of the
+  %% parent content width away from the physical page center.
+  \setlength\kyotoposter@columncenteroverhang{.01\linewidth}%
   \global\kyotoposter@leftcolumntoks={}%
   \global\kyotoposter@rightcolumntoks={}%
 }
