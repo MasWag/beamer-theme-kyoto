@@ -78,8 +78,8 @@
   \setbeamerfont{alerted text}{series=\bfseries}
 \mode<all>
 
-%% \emph -> bold + emphasis color, rather than the usual italics.
-\renewcommand\emph[1]{\textcolor{KyotoEmph}{\textbf{#1}}}
+%% Preserve standard LaTeX/Beamer emphasis, as Madrid does: italic
+%% emphasis inherits the surrounding color, including in block headings.
 
 %% Hyperlinks (internal / url / citation) use the navy-blue link color.
 \AtBeginDocument{%
