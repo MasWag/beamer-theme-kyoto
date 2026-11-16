@@ -72,6 +72,29 @@ override the theme options above after the fact:
 - `\kyotofooter{<text>}` -- set the right-hand footer text.
 
 
+### Optional frame citations
+
+Inside a titled frame, provide citation text once; Kyoto places it in small
+text, right-aligned just below the title:
+
+```latex
+\begin{frame}{A monitoring algorithm}
+  \framecitation{\cite{reference-key}}
+  % slide content
+\end{frame}
+```
+
+In an Org/Beamer source, use `#+LATEX: \framecitation{\cite{reference-key}}`
+under the frame heading. Citation text is optional: omitting the command
+adds no citation line or extra spacing. It resets for each slide/overlay;
+place it outside overlay-specific content to show it on every overlay.
+The command accepts arbitrary text and does not load a bibliography package.
+Use your document's existing citation setup.
+
+The `frame citation` Beamer template, font, and color control its appearance,
+independently of the title. This does not repurpose the frame subtitle.
+
+
 ## Poster usage
 
 ```latex

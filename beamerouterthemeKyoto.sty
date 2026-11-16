@@ -154,11 +154,30 @@
 %% Ordinary frame title: bold, centered, dark, on the light background;
 %% with whitespace between the title and the body.
 %% ------------------------------------------------------------------
+%% Optional per-slide citation. Like Beamer's title/subtitle, this must
+%% survive the body box's group until the title template is rendered.
+%% Reset on each overlay so neither another frame nor an omitted overlay
+%% inherits the previous citation. Set it inside the frame body.
+\newcommand\insertframecitation{}
+\newcommand\framecitation[1]{\gdef\insertframecitation{#1}}
+\AtBeginEnvironment{beamer@frameslide}{\global\let\insertframecitation\@empty}
+\setbeamerfont{frame citation}{size=\small,series=\mdseries}
+\setbeamercolor{frame citation}{fg=KyotoFg}
+\setbeamertemplate{frame citation}{%
+  {\normalfont\usebeamerfont{frame citation}\usebeamercolor[fg]{frame citation}%
+   \raggedleft\insertframecitation\par}%
+}
+
 \setbeamertemplate{frametitle}{%
   \nointerlineskip
   \vspace{7pt}%
   {\normalfont\kyoto@l@frametitle\bfseries\color{KyotoFg}%
    \centering\insertframetitle\par}%
+  \ifx\insertframecitation\@empty\else
+    \vspace{2pt}%
+    \usebeamertemplate{frame citation}%
+    \vspace{6pt}%
+  \fi
   \vspace{3pt}%
 }
 
