@@ -95,6 +95,18 @@ The `frame citation` Beamer template, font, and color control its appearance,
 independently of the title. This does not repurpose the frame subtitle.
 
 
+### Equations inside blocks
+
+Example, definition, theorem, and other block bodies use compact spacing
+above and below displayed equations. Font-size changes preserve this local
+spacing; outside blocks, the standard size-dependent spacing is restored.
+Reference labels inside blocks retain their links without adding vertical space.
+To adjust the block display gap globally, set this length after loading Kyoto:
+
+```latex
+\setlength{\kyotoblockdisplayskip}{3pt}
+```
+
 ## Poster usage
 
 ```latex

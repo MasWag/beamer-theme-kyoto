@@ -65,6 +65,44 @@
   %% of this theme; see beamercolorthemeKyoto.sty for the navy coloring.
   \setbeamertemplate{blocks}[rounded][shadow=false]
 
+  %% Append inside the rounded box's body group: these settings cannot
+  %% leak into the rest of the frame or subsequent blocks.
+  \newcommand\kyoto@startblockspacing{%
+    \kyoto@inblocktrue
+    \kyoto@blockdisplayspacing
+  }
+  \addtobeamertemplate{block begin}{}{\kyoto@startblockspacing}
+  \addtobeamertemplate{block alerted begin}{}{\kyoto@startblockspacing}
+  \addtobeamertemplate{block example begin}{}{\kyoto@startblockspacing}
+
+  %% Org labels insert a zero-height hyperlink box before the first
+  %% paragraph. Preserve vertical-list depth so that this invisible
+  %% target does not introduce an extra interline gap in block bodies.
+  \let\kyoto@inserttarget\beamer@inserttarget
+  \newdimen\kyoto@targetprevdepth
+  \def\beamer@inserttarget#1{%
+    \ifkyoto@inblock
+      \ifvmode
+        \kyoto@targetprevdepth=\prevdepth
+        \kyoto@inserttarget{#1}%
+        \prevdepth=\kyoto@targetprevdepth
+      \else
+        \kyoto@inserttarget{#1}%
+      \fi
+    \else
+      \kyoto@inserttarget{#1}%
+    \fi
+  }
+
+  %% Org center blocks use LaTeX's list-based center environment. Keep
+  %% its extra vertical glue small inside boxes without changing lists.
+  \AtBeginEnvironment{center}{%
+    \ifkyoto@inblock
+      \setlength\topsep{2pt}%
+      \setlength\partopsep{0pt}%
+    \fi
+  }
+
   %% Bibliography items: Beamer's standard "triangle" marker (a plain
   %% colored glyph) rather than the default article/book icon, which is
   %% drawn as a fixed-color image and so cannot pick up the theme's navy

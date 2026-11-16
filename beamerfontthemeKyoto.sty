@@ -41,13 +41,48 @@
 \newcommand\kyoto@l@footer{\fontsize{8.8pt}{11.5pt}\selectfont}
 \newcommand\kyoto@l@footnote{\fontsize{7.6pt}{9.9pt}\selectfont}
 
+%% Compact display spacing is local to block bodies. Font changes inside
+%% a block must reapply it after the standard size command resets skips.
+\newif\ifkyoto@inblock
+\newlength\kyotoblockdisplayskip
+\setlength\kyotoblockdisplayskip{3pt}
+\newcommand\kyoto@blockdisplayspacing{%
+  \ifkyoto@inblock
+    \abovedisplayskip\kyotoblockdisplayskip
+    \belowdisplayskip\kyotoblockdisplayskip
+    \abovedisplayshortskip\kyotoblockdisplayskip
+    \belowdisplayshortskip\kyotoblockdisplayskip
+  \fi
+}
+\newcommand\kyoto@hookblocksize[1]{%
+  \AddToHook{cmd/#1/after}{\kyoto@blockdisplayspacing}%
+}
+\forcsvlist{\kyoto@hookblocksize}{small,scriptsize,tiny,large,Large,LARGE,huge,Huge}
+
 \mode<presentation>
   %% Expose the condensed display family through Beamer's public font role.
   \setbeamerfont{frametitle}{family=\kyoto@titlefamily}
 
-  %% Body text at 12pt, with the standard 12pt/14.5pt leading.
-  \renewcommand\normalsize{\fontsize{12pt}{14.5pt}\selectfont}
-  \renewcommand\footnotesize{\kyoto@l@footnote}
+  %% Use a full size reset, not just \fontsize: returning from \small
+  %% must also restore display skips and the normal first-level list.
+  %% The values below are the standard LaTeX 12pt normal-size settings.
+  \renewcommand\normalsize{%
+    \@setfontsize\normalsize{12pt}{14.5pt}%
+    \abovedisplayskip 12pt plus 3pt minus 7pt%
+    \abovedisplayshortskip 0pt plus 3pt%
+    \belowdisplayshortskip 6.5pt plus 3.5pt minus 3pt%
+    \belowdisplayskip\abovedisplayskip
+    \let\@listi\@listI
+    \kyoto@blockdisplayspacing
+  }
+  %% Keep the class's complete footnote spacing reset, then select
+  %% Kyoto's existing footnote size and leading.
+  \let\kyoto@standard@footnotesize\footnotesize
+  \renewcommand\footnotesize{%
+    \kyoto@standard@footnotesize
+    \kyoto@l@footnote
+    \kyoto@blockdisplayspacing
+  }
   \setbeamerfont{footnote}{size=\footnotesize}
 
   %% Do not shrink nested list levels.
